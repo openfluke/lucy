@@ -1,25 +1,27 @@
 # go/ — Lucy measuring core
 
-**Version:** `0.1.0` (`lucy.Version`)
+**Version:** `0.2.0` (`lucy.Version`)
 
-Source of truth for **Score**, **Q**, **LPD** (Lucy Pareto density), gold / lean /
-trap, and related live-fit math. Ported from `welvet/lucy` for a portable module.
+Source of truth for **Score**, **Q**, **LPD**, gold / lean / trap.
 
 ```bash
-cd go
-go test ./lucy/
+cd go && go test ./lucy/
+./scripts/build-artifacts.sh   # from repo: go/scripts/…
 ```
 
 ```go
 import "github.com/openfluke/lucy/lucy"
 
 board := lucy.BuildLPD(samples)
-_ = board.Top[0].LPD
+board = lucy.BuildLPDWithOptions(samples, lucy.DensityOptions{KeepFloor: 0.7})
+resp, err := lucy.BuildFromJSON(raw) // stable host JSON schema
 ```
 
-Goldens: [`../testdata/goldens_lpd_v0.1.json`](../testdata/goldens_lpd_v0.1.json)
+## Artifacts
 
-## Later (0.2+)
+| Target | Command |
+|--------|---------|
+| Native CLI | `cmd/lucy` — `lucy version` / `lucy build-lpd` |
+| Wasm | `cmd/lucywasm` — `lucyBuildLPD` / `lucyVersion` globals |
 
-- wasm + native binaries for `@openfluke/lucy` / PyPI
-- optional board → chart / JPG
+Goldens: [`../testdata/goldens_lpd_v0.2.json`](../testdata/goldens_lpd_v0.2.json)

@@ -1,13 +1,23 @@
 # `@openfluke/lucy`
 
-**Version:** `0.1.0` (unpublished)
+**Version:** `0.2.0`
 
-npm package for **web / Node / Bun**: board **types** now; measuring via Go
-**wasm** + **native binaries** at **0.2+**. UI boards (React / Angular / vanilla)
-target **0.3**.
+Node / Bun measuring via **Go wasm**. Board types for React / Angular / vanilla
+(UI components land at 0.3).
 
-0.1 does **not** reimplement LPD in TypeScript — call Go `BuildLPD` or wait for wasm.
+```bash
+cd js && npm test
+```
 
-```ts
-import { VERSION, KEEP_FLOOR, type Sample } from "@openfluke/lucy";
+```js
+import { buildLPD } from "@openfluke/lucy";
+
+const { board } = await buildLPD(samples, { keep_floor: 0.7 });
+console.log(board.top[0].lpd);
+```
+
+Rebuild wasm after Go changes:
+
+```bash
+npm run build   # runs go/scripts/build-artifacts.sh
 ```

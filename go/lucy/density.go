@@ -156,8 +156,15 @@ func DensityFormula() string {
 	return "Synthetic organism / Lucy density: run+train in a small box. Hard Acc = argmax accuracy. Acc keep % = this Acc / Acc-champ Acc (1.0 = matches the best Acc). SoftAcc = serve-confidence (not Score). Score = Thru x Avail x HardAcc / 10,000. Q = geomean Acc-keep/Thru-keep/Avail-keep vs learner peaks. LPD = Q x shrink vs Acc-champ RAM; 0 unless Acc keep >=70%. Gold = all 3 pillars >=80% at <=20% Acc-champ RAM. Gold-std = Acc keep >=80% plus Thru or Avail, then smallest then fastest. Lean = Acc keep >=95% of Acc champ, then smallest RAM / fastest Thru / best Avail — sacrifice peak Acc only within that band."
 }
 
-// BuildLPD ranks samples for consciousness (Acc/Thru/Avail) then memory density.
+// BuildLPD ranks samples for consciousness (Acc/Thru/Avail) then memory density
+// using default floors (LPDKeepFloor, LPDGoldKeep, …).
 func BuildLPD(pts []Sample) LPD {
+	return BuildLPDWithOptions(pts, DensityOptions{})
+}
+
+// BuildLPDWithOptions is BuildLPD with tunable keep / gold / lean / shrink floors.
+func BuildLPDWithOptions(pts []Sample, opts DensityOptions) LPD {
+	opts = opts.normalized()
 	out := LPD{Formula: DensityFormula()}
 	if len(pts) == 0 {
 		return out
@@ -191,7 +198,7 @@ func BuildLPD(pts []Sample) LPD {
 	out.PeakScore, out.PeakSoft, out.PeakAcc = champ.Score, softChamp.Soft, accChamp.Acc
 	out.FastThru, out.FastID = fastThru, fastID
 	out.BestAvail, out.AvailID = bestAvail, availID
-	liveThru, liveAvail := learnerPeaks(pts, accChamp.Acc)
+	liveThru, liveAvail := learnerPeaks(pts, accChamp.Acc, opts)
 	out.PeakThru, out.PeakAvail = liveThru, liveAvail
 	if accChamp.RAMKiB <= 0 {
 		accChamp.RAMKiB = 1e-6
@@ -203,9 +210,9 @@ func BuildLPD(pts []Sample) LPD {
 	rows := make([]LPDRow, 0, len(pts))
 	var live LPDRow
 	for _, p := range pts {
-		r := lpdRow(p, out)
+		r := lpdRow(p, out, opts)
 		rows = append(rows, r)
-		if r.RelAcc >= LPDKeepFloor && (live.ID == "" || r.Q > live.Q) {
+		if r.RelAcc >= opts.KeepFloor && (live.ID == "" || r.Q > live.Q) {
 			live = r
 		}
 		switch r.Band {
@@ -261,13 +268,13 @@ func BuildLPD(pts []Sample) LPD {
 	out.TopSpeed = rankLPD(rows, func(r LPDRow) float64 { return r.MSpeed }, 12)
 	out.TopAvail = rankLPD(rows, func(r LPDRow) float64 { return r.MAvail }, 12)
 	out.TopMix = rankLPD(rows, func(r LPDRow) float64 { return r.Mix }, 12)
-	out.GoldStd, out.GoldModes = goldStandard(rows)
-	out.LeanChamp, out.Lean, out.LeanByArch = leanStandard(rows)
+	out.GoldStd, out.GoldModes = goldStandard(rows, opts)
+	out.LeanChamp, out.Lean, out.LeanByArch = leanStandard(rows, opts)
 	return out
 }
 
-func learnerPeaks(pts []Sample, peakAcc float64) (thru, avail float64) {
-	floor := peakAcc * LPDKeepFloor
+func learnerPeaks(pts []Sample, peakAcc float64, opts DensityOptions) (thru, avail float64) {
+	floor := peakAcc * opts.KeepFloor
 	first := true
 	for _, p := range pts {
 		if peakAcc > 0 && p.Acc < floor {
@@ -291,10 +298,10 @@ func lpdChampOf(p Sample) LPDChamp {
 	}
 }
 
-func goldStandard(rows []LPDRow) (LPDRow, []LPDMode) {
+func goldStandard(rows []LPDRow, opts DensityOptions) (LPDRow, []LPDMode) {
 	var keep []LPDRow
 	for _, r := range rows {
-		if r.RelAcc >= LPDGoldKeep && r.Pillars >= 2 {
+		if r.RelAcc >= opts.GoldKeep && r.Pillars >= 2 {
 			keep = append(keep, r)
 		}
 	}
@@ -361,10 +368,10 @@ func goldStandard(rows []LPDRow) (LPDRow, []LPDMode) {
 
 // leanStandard: Acc keep ≥95% of Acc champ, then smallest RAM, fastest Thru, best Avail.
 // This is the "sacrifice a little Acc for footprint/speed" board — below 95% keep is out.
-func leanStandard(rows []LPDRow) (LPDRow, []LPDRow, []LPDMode) {
+func leanStandard(rows []LPDRow, opts DensityOptions) (LPDRow, []LPDRow, []LPDMode) {
 	var keep []LPDRow
 	for _, r := range rows {
-		if r.RelAcc >= LPDLeanKeep {
+		if r.RelAcc >= opts.LeanKeep {
 			keep = append(keep, r)
 		}
 	}
@@ -432,7 +439,7 @@ func rankLPD(rows []LPDRow, val func(LPDRow) float64, max int) []LPDRow {
 	return cp
 }
 
-func lpdRow(p Sample, board LPD) LPDRow {
+func lpdRow(p Sample, board LPD, opts DensityOptions) LPDRow {
 	rel := func(v, peak float64) float64 {
 		if peak <= 0 {
 			return 1
@@ -463,41 +470,41 @@ func lpdRow(p Sample, board LPD) LPDRow {
 	}
 	frac := ram / ref
 	shrink := ref / ram
-	if shrink > LPDShrinkCap {
-		shrink = LPDShrinkCap
+	if shrink > opts.ShrinkCap {
+		shrink = opts.ShrinkCap
 	}
 	lpd, mspeed, mavail, mix := 0.0, 0.0, 0.0, 0.0
 	da, dt, dv := 0.0, 0.0, 0.0
-	accKeep := ra >= LPDKeepFloor
+	accKeep := ra >= opts.KeepFloor
 	if accKeep {
 		lpd = q * shrink
 		mspeed, mavail, mix = rt, rv, q
 		da, dt, dv = ra*shrink, rt*shrink, rv*shrink
 	}
 	pillars := 0
-	if ra >= LPDGoldKeep {
+	if ra >= opts.GoldKeep {
 		pillars++
 	}
-	if rt >= LPDGoldKeep {
+	if rt >= opts.GoldKeep {
 		pillars++
 	}
-	if rv >= LPDGoldKeep {
+	if rv >= opts.GoldKeep {
 		pillars++
 	}
-	pair := ra >= LPDGoldKeep && pillars >= 2
+	pair := ra >= opts.GoldKeep && pillars >= 2
 	trifecta := pillars >= 3
-	gold := trifecta && frac <= LPDGoldRAM
+	gold := trifecta && frac <= opts.GoldRAM
 	band := "—"
 	switch {
 	case gold:
 		band = "gold"
-	case pair && frac <= LPDNearRAM:
+	case pair && frac <= opts.NearRAM:
 		band = "near"
 	case pair:
 		band = "keep"
-	case ra >= LPDGoldKeep:
+	case ra >= opts.GoldKeep:
 		band = "acc"
-	case frac <= LPDGoldRAM && !accKeep:
+	case frac <= opts.GoldRAM && !accKeep:
 		band = "trap"
 	}
 	return LPDRow{

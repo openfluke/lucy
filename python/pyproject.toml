@@ -1,6 +1,6 @@
 [project]
 name = "openfluke-lucy"
-version = "0.1.0"
+version = "0.2.0"
 description = "Lucy live-fit measuring (wraps Go binaries) — Score, Q, LPD, boards"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -8,7 +8,7 @@ license = { text = "Apache-2.0" }
 authors = [{ name = "openfluke" }]
 keywords = ["lucy", "lpd", "pareto", "welvet", "tide", "live-fit"]
 classifiers = [
-  "Development Status :: 1 - Planning",
+  "Development Status :: 3 - Alpha",
   "Programming Language :: Python :: 3",
 ]
 
@@ -22,3 +22,6 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+lucy = ["bin/*"]

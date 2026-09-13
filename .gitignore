@@ -20,9 +20,8 @@ python/build/
 *.pyc
 
 # Wasm / binaries (build artifacts)
-**/wasm/
-**/*.wasm
-**/artifacts/
+# build scratch (packages keep their own copies under js/wasm and python/.../bin)
+/artifacts/
 
 # Editors / OS
 .DS_Store
