@@ -1,27 +1,17 @@
 # go/ — Lucy measuring core
 
-**Version:** `0.2.0` (`lucy.Version`)
+**Version:** `0.3.0`
 
-Source of truth for **Score**, **Q**, **LPD**, gold / lean / trap.
+Measuring + SVG boards (Tide-style). JPG export still later.
 
 ```bash
 cd go && go test ./lucy/
-./scripts/build-artifacts.sh   # from repo: go/scripts/…
+../go/scripts/build-artifacts.sh
 ```
 
 ```go
-import "github.com/openfluke/lucy/lucy"
-
 board := lucy.BuildLPD(samples)
-board = lucy.BuildLPDWithOptions(samples, lucy.DensityOptions{KeepFloor: 0.7})
-resp, err := lucy.BuildFromJSON(raw) // stable host JSON schema
+svg := lucy.RadarSVG("Consciousness", lucy.ConsciousnessSeries(board, 8))
 ```
 
-## Artifacts
-
-| Target | Command |
-|--------|---------|
-| Native CLI | `cmd/lucy` — `lucy version` / `lucy build-lpd` |
-| Wasm | `cmd/lucywasm` — `lucyBuildLPD` / `lucyVersion` globals |
-
-Goldens: [`../testdata/goldens_lpd_v0.2.json`](../testdata/goldens_lpd_v0.2.json)
+CLI: `lucy build-lpd` · `lucy chart-radar|chart-scatter|chart-bars`

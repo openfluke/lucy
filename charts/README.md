@@ -1,8 +1,10 @@
-# charts/ — optional render (later)
+# charts/
 
-Placeholder for board → graph / **JPG** (and similar) generation.
+**0.3.0:** SVG generation lives in Go (`lucy.RadarSVG` / `ScatterSVG` / `BarsSVG`)
+and JS canvas helpers (`@openfluke/lucy/charts`). CLI:
 
-Idea: Go core ranks the board; a render path (Go and/or the npm UI) exports
-static charts for PDFs, reports, and hosts that do not want a live React tree.
+```bash
+lucy chart-radar < request.json > radar.svg
+```
 
-Not started — Tide/Ocean/River PDFs remain the reference look until this lands.
+**JPG / PDF parity** with Tide/River full report set → targeted for **1.0**.

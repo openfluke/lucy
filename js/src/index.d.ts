@@ -6,26 +6,7 @@ export const GOLD_RAM: number;
 export const NEAR_RAM: number;
 export const SHRINK_CAP: number;
 
-export type Sample = {
-  tide?: string;
-  id: string;
-  mode?: string;
-  dtype?: string;
-  format?: string;
-  arch?: string;
-  score?: number;
-  soft?: number;
-  soft_acc?: number;
-  acc?: number;
-  avg_accuracy?: number;
-  thru?: number;
-  throughput?: number;
-  avail?: number;
-  availability?: number;
-  ramKiB?: number;
-  ram_kib?: number;
-};
-
+export type Sample = Record<string, unknown> & { id: string };
 export type DensityOptions = {
   keep_floor?: number;
   gold_keep?: number;
@@ -34,16 +15,21 @@ export type DensityOptions = {
   near_ram?: number;
   shrink_cap?: number;
 };
-
 export type BuildResponse = {
   version: string;
   options: Required<DensityOptions>;
   board: Record<string, unknown>;
 };
 
-export function buildLPD(
-  samples: Sample[],
-  options?: DensityOptions,
-): Promise<BuildResponse>;
-
+export function buildLPD(samples: Sample[], options?: DensityOptions): Promise<BuildResponse>;
+export function buildLPDNative(samples: Sample[], options?: DensityOptions): Promise<BuildResponse>;
+export function resolveLucyBinary(): Promise<string>;
 export function version(): Promise<string>;
+export function drawRadar(canvas: HTMLCanvasElement, series: unknown[], opts?: { title?: string }): void;
+export function consciousnessSeries(board: unknown, max?: number): unknown[];
+export function densitySeries(board: unknown, max?: number): unknown[];
+export function drawScatter(canvas: HTMLCanvasElement, pts: unknown[], opts?: object): void;
+export function lpdScatterPoints(board: unknown): unknown[];
+export function lpdTableHTML(board: unknown, opts?: { max?: number }): string;
+export function registerLucyElements(): void;
+export class LucyBoardElement extends HTMLElement { board: unknown }

@@ -1,20 +1,12 @@
 # python/ — `openfluke-lucy`
 
-**Version:** `0.2.0`
-
-Wraps the Go **`lucy` CLI** (no Python reimplementation of LPD).
+**Version:** `0.3.0`
 
 ```python
-from lucy import build_lpd, version
+from lucy import build_lpd, board_records, chart_svg, to_dataframe
 
-print(version())
-board = build_lpd(samples, options={"keep_floor": 0.7})
-```
-
-Binary resolution: `LUCY_BIN` → `lucy/bin/lucy-<os>-<arch>` → `lucy/bin/lucy`.
-
-Rebuild:
-
-```bash
-../go/scripts/build-artifacts.sh
+resp = build_lpd(samples, options={"keep_floor": 0.7})
+rows = board_records(resp)       # list[dict] for notebooks
+svg = chart_svg(samples, "radar")  # Go SVG
+# df = to_dataframe(resp)        # needs pandas
 ```

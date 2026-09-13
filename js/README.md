@@ -1,23 +1,15 @@
 # `@openfluke/lucy`
 
-**Version:** `0.2.0`
+**Version:** `0.3.0`
 
-Node / Bun measuring via **Go wasm**. Board types for React / Angular / vanilla
-(UI components land at 0.3).
+| Import | What |
+|--------|------|
+| `@openfluke/lucy` | `buildLPD` (wasm), `buildLPDNative`, chart helpers |
+| `@openfluke/lucy/react` | `LucyBoard`, radars, table (peer `react`) |
+| `@openfluke/lucy/charts` | vanilla canvas/HTML helpers |
+| `@openfluke/lucy/elements` | `<lucy-board>` custom element (Angular-friendly) |
 
 ```bash
 cd js && npm test
-```
-
-```js
-import { buildLPD } from "@openfluke/lucy";
-
-const { board } = await buildLPD(samples, { keep_floor: 0.7 });
-console.log(board.top[0].lpd);
-```
-
-Rebuild wasm after Go changes:
-
-```bash
-npm run build   # runs go/scripts/build-artifacts.sh
+node examples/byo-poll.mjs ../testdata/goldens_lpd_v0.3.json
 ```

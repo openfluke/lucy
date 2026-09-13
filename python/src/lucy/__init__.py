@@ -1,15 +1,17 @@
-"""Lucy measuring via Go binaries (PyPI openfluke-lucy 0.2.0)."""
+"""Lucy measuring via Go binaries (openfluke-lucy 0.3.0)."""
 
 from __future__ import annotations
 
 import json
-import os
-import platform
 import subprocess
 from pathlib import Path
 from typing import Any, Mapping, MutableMapping, Optional, Sequence, TypedDict, Union
 
-__version__ = "0.2.0"
+from ._bin import default_binary
+from .board import board_records, to_dataframe, top_rows
+from .charts import chart_svg
+
+__version__ = "0.3.0"
 
 KEEP_FLOOR = 0.70
 GOLD_KEEP = 0.80
@@ -27,33 +29,18 @@ class Sample(TypedDict, total=False):
     arch: str
     score: float
     soft: float
+    soft_acc: float
     acc: float
+    avg_accuracy: float
     thru: float
+    throughput: float
     avail: float
+    availability: float
     ram_kib: float
     tide: str
 
 
 DensityOptions = Mapping[str, float]
-
-
-def _bin_dir() -> Path:
-    return Path(__file__).resolve().parent / "bin"
-
-
-def _default_binary() -> Path:
-    env = os.environ.get("LUCY_BIN")
-    if env:
-        return Path(env)
-    named = _bin_dir() / f"lucy-{platform.system().lower()}-{platform.machine().replace('x86_64', 'amd64').replace('aarch64', 'arm64')}"
-    if named.exists():
-        return named
-    plain = _bin_dir() / "lucy"
-    if plain.exists():
-        return plain
-    raise FileNotFoundError(
-        "lucy binary not found; set LUCY_BIN or run go/scripts/build-artifacts.sh"
-    )
 
 
 def build_lpd(
@@ -62,8 +49,7 @@ def build_lpd(
     *,
     binary: Optional[Union[str, Path]] = None,
 ) -> dict[str, Any]:
-    """Rank samples for Lucy Pareto density via the Go CLI."""
-    bin_path = Path(binary) if binary else _default_binary()
+    bin_path = Path(binary) if binary else default_binary()
     req: MutableMapping[str, Any] = {"samples": list(samples)}
     if options:
         req["options"] = dict(options)
@@ -79,6 +65,24 @@ def build_lpd(
 
 
 def version(binary: Optional[Union[str, Path]] = None) -> str:
-    bin_path = Path(binary) if binary else _default_binary()
+    bin_path = Path(binary) if binary else default_binary()
     proc = subprocess.run([str(bin_path), "version"], capture_output=True, check=True, text=True)
     return proc.stdout.strip()
+
+
+__all__ = [
+    "__version__",
+    "KEEP_FLOOR",
+    "GOLD_KEEP",
+    "LEAN_KEEP",
+    "GOLD_RAM",
+    "NEAR_RAM",
+    "SHRINK_CAP",
+    "Sample",
+    "build_lpd",
+    "version",
+    "top_rows",
+    "board_records",
+    "to_dataframe",
+    "chart_svg",
+]

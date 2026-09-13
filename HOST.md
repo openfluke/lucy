@@ -1,46 +1,47 @@
-# Host import guide (0.2)
+# Host import guide (0.3)
 
-Lucy does not train models. A host feeds finished cells and gets a board back.
+Lucy does not train models. Feed finished cells → get a board (+ optional charts).
 
-## Go (Tide / Ocean / River / labs)
+## Replace welvet/lucy / Tide
 
 ```go
-import "github.com/openfluke/lucy/lucy"
+import "github.com/openfluke/lucy/lucy" // was github.com/openfluke/welvet/lucy
 
 board := lucy.BuildLPD(samples)
-// or tunable:
-board = lucy.BuildLPDWithOptions(samples, lucy.DensityOptions{KeepFloor: 0.7})
+svg := lucy.RadarSVG("Consciousness", lucy.ConsciousnessSeries(board, 8))
 ```
 
-Replace `github.com/openfluke/welvet/lucy` when you are ready — same types.
+Tide dash/PDF can keep drawing; point measuring at this module when ready.
 
-## JSON (any language)
-
-```json
-{
-  "samples": [
-    {"id": "f32", "avg_accuracy": 90, "throughput": 200, "availability": 40, "score": 100, "ram_kib": 1000}
-  ],
-  "options": {"keep_floor": 0.7}
-}
-```
+## JSON / CLI
 
 ```bash
 lucy build-lpd < request.json
+lucy chart-radar < request.json > radar.svg
 ```
 
-## Node / Bun
+## Node / Bun / React
 
 ```js
-import { buildLPD } from "@openfluke/lucy";
-const { board } = await buildLPD(samples);
+import { buildLPD, buildLPDNative } from "@openfluke/lucy";
+import { LucyBoard } from "@openfluke/lucy/react";
+const { board } = await buildLPD(samples, { keep_floor: 0.7 });
+```
+
+## Angular
+
+```js
+import { registerLucyElements } from "@openfluke/lucy/elements";
+registerLucyElements();
+// <lucy-board> then el.board = board;  (+ CUSTOM_ELEMENTS_SCHEMA)
 ```
 
 ## Python
 
 ```python
-from lucy import build_lpd
+from lucy import build_lpd, board_records, chart_svg
 resp = build_lpd(samples)
+svg = chart_svg(samples, "bars")
 ```
 
-Rebuild artifacts after Go changes: `./go/scripts/build-artifacts.sh`
+Rebuild artifacts: `./go/scripts/build-artifacts.sh`

@@ -21,6 +21,25 @@ func main() {
 	switch os.Args[1] {
 	case "version", "-version", "--version":
 		fmt.Println(lucy.Version)
+	case "chart-radar", "chart-scatter", "chart-bars":
+		raw, err := io.ReadAll(os.Stdin)
+		if err != nil {
+			fail(err)
+		}
+		resp, err := lucy.BuildFromJSON(raw)
+		if err != nil {
+			fail(err)
+		}
+		var svg string
+		switch os.Args[1] {
+		case "chart-radar":
+			svg = lucy.RadarSVG("Consciousness radar", lucy.ConsciousnessSeries(resp.Board, 8))
+		case "chart-scatter":
+			svg = lucy.ScatterSVG("Q% vs RAM", "RAM KiB", "Q %", lucy.LPDScatterPoints(resp.Board))
+		case "chart-bars":
+			svg = lucy.BarsSVG("Top LPD", resp.Board, 12)
+		}
+		fmt.Print(svg)
 	case "build-lpd", "lpd":
 		raw, err := io.ReadAll(os.Stdin)
 		if err != nil {
@@ -50,6 +69,7 @@ func usage() {
 Usage:
   lucy version
   lucy build-lpd < request.json   # stdin BuildRequest → stdout BuildResponse
+  lucy chart-radar|chart-scatter|chart-bars < request.json  # SVG on stdout
 
 BuildRequest:
   {"samples":[{"id":"...","acc":90,"thru":200,"avail":40,"score":100,"ram_kib":1000}],

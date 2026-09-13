@@ -20,12 +20,12 @@ the Go core version they claim.
 
 | Package | Channel | Version | Status | Notes |
 |---------|---------|---------|--------|-------|
-| **lucy** (monorepo) | git tag / [`VERSION`](VERSION) | `v0.2.0` | artifacts live | Go CLI + wasm; npm/PyPI consume them; goldens locked |
-| **Go core** `github.com/openfluke/lucy` | Go module | `v0.2.0` | usable | `BuildLPDWithOptions`, JSON `BuildRequest`/`BuildResponse`, `cmd/lucy` + wasm |
-| **`@openfluke/lucy`** | npm | `0.2.0` | ready (unpublished) | Go **wasm** measuring — [`js/`](js/); UI boards at 0.3 |
-| **`openfluke-lucy`** | PyPI | `0.2.0` | ready (unpublished) | Wraps Go **`lucy` CLI** binaries — [`python/`](python/) |
-| **testdata goldens** | in-repo | `0.2.0` | locked | [`testdata/goldens_lpd_v0.2.json`](testdata/goldens_lpd_v0.2.json) |
-| **charts / JPG** | in-repo | — | not started | Optional render path — [`charts/`](charts/) |
+| **lucy** (monorepo) | git tag / [`VERSION`](VERSION) | `v0.3.0` | boards + charts | Tide-style UI helpers; SVG charts; host guide |
+| **Go core** `github.com/openfluke/lucy` | Go module | `v0.3.0` | usable | + `RadarSVG` / `ScatterSVG` / `BarsSVG` + `lucy chart-*` |
+| **`@openfluke/lucy`** | npm | `0.3.0` | ready (unpublished) | wasm + **native** + React/vanilla/`<lucy-board>` — [`js/`](js/) |
+| **`openfluke-lucy`** | PyPI | `0.3.0` | ready (unpublished) | + `board_records` / `to_dataframe` / `chart_svg` — [`python/`](python/) |
+| **testdata goldens** | in-repo | `0.3.0` | locked | [`testdata/goldens_lpd_v0.3.json`](testdata/goldens_lpd_v0.3.json) |
+| **charts / JPG** | in-repo | `0.3.0` | SVG live (JPG later) | Go SVG + JS canvas; see [`charts/`](charts/) |
 
 **Scoreboard rules**
 
@@ -56,8 +56,8 @@ Milestone meaning (all channels share the story; patch bumps `0.x.y` do not add 
 |-----|--------|
 | **0.0** | Repo + stubs only |
 | **0.1** | Real `BuildLPD` + locked goldens; Go importable |
-| **0.2** | Host-facing boards API + npm/PyPI consuming Go artifacts ← **current** |
-| **0.3** | Tide/Ocean/River-style charts usable from JS UI |
+| **0.2** | Host-facing boards API + npm/PyPI consuming Go artifacts |
+| **0.3** | Tide/Ocean/River-style charts usable from JS UI ← **current** |
 | **1.0** | Portable ruler: wasm + binaries documented; one real host path; formulas tunable without forks |
 
 ### Monorepo — what ships when
@@ -202,21 +202,16 @@ lucy/
 
 ## Relationship to Welvet / Tide
 
-**v0.2.0:** measuring math lives in **`go/lucy`** (ported from
-[welvet/lucy](https://github.com/openfluke/welvet/tree/main/lucy)). Artifacts:
+**v0.3.0:** measuring math + Tide-style boards/charts live here.
 
-- native CLI: `go/cmd/lucy` → `lucy build-lpd`
-- wasm: `go/cmd/lucywasm` → `@openfluke/lucy`
-- Python wraps the same CLI → `openfluke-lucy`
+- Go: `BuildLPD` / options / JSON + **SVG** (`RadarSVG`, `ScatterSVG`, `BarsSVG`)
+- CLI: `lucy build-lpd` · `lucy chart-radar|chart-scatter|chart-bars`
+- npm: wasm + native + React (`@openfluke/lucy/react`) + `<lucy-board>` CE
+- Python: `build_lpd`, `board_records` / `to_dataframe`, `chart_svg`
 
-Tide / Ocean / River can switch imports to this module when ready.
+Host guide: [`HOST.md`](HOST.md). Rebuild: `./go/scripts/build-artifacts.sh`
 
-```bash
-# rebuild wasm + cross binaries into js/wasm and python/.../bin
-./go/scripts/build-artifacts.sh
-```
-
-Goldens: [`testdata/goldens_lpd_v0.2.json`](testdata/goldens_lpd_v0.2.json).
+Goldens: [`testdata/goldens_lpd_v0.3.json`](testdata/goldens_lpd_v0.3.json).
 
 ---
 
@@ -231,7 +226,9 @@ _ = board.Top // ranked by LPD, traps at 0
 
 ```js
 import { buildLPD } from "@openfluke/lucy";
+import { LucyBoard } from "@openfluke/lucy/react"; // peer: react
 const { board } = await buildLPD(samples, { keep_floor: 0.7 });
+// <LucyBoard board={board} />
 ```
 
 ```python
