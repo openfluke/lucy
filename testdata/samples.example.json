@@ -1,0 +1,36 @@
+{
+  "note": "Example only — replace with locked goldens when BuildLPD lands.",
+  "keep_floor": 0.7,
+  "samples": [
+    {
+      "id": "f32",
+      "mode": "sgd",
+      "acc": 90,
+      "thru": 200,
+      "avail": 40,
+      "score": 100,
+      "ram_kib": 1000
+    },
+    {
+      "id": "int8",
+      "mode": "sgd",
+      "acc": 82,
+      "thru": 180,
+      "avail": 38,
+      "score": 85,
+      "ram_kib": 180
+    },
+    {
+      "id": "bin",
+      "mode": "sgd",
+      "acc": 12,
+      "thru": 400,
+      "avail": 50,
+      "score": 40,
+      "ram_kib": 40
+    }
+  ],
+  "expect": {
+    "comment": "int8 should lead LPD; bin is trap (high shrink, Acc keep below floor)"
+  }
+}

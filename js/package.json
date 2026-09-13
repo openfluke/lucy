@@ -1,0 +1,43 @@
+{
+  "name": "@openfluke/lucy",
+  "version": "0.0.0",
+  "description": "Lucy live-fit measuring + boards — wasm/binaries from Go, UI for Node/Bun/React/Angular",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "echo 'placeholder — wire tsc + wasm artifacts later'",
+    "test": "echo 'placeholder — compare against ../testdata goldens'"
+  },
+  "keywords": [
+    "lucy",
+    "lpd",
+    "pareto",
+    "welvet",
+    "tide",
+    "live-fit",
+    "wasm"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/openfluke/lucy.git",
+    "directory": "js"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
