@@ -1,10 +1,6 @@
-# python/ — PyPI wrapper (later)
+# python/ — PyPI wrapper
 
-Package name (planned): **`openfluke-lucy`**
+**Version:** `0.1.0` (unpublished) — package name **`openfluke-lucy`**
 
-Python does **not** reimplement LPD. It will ship / invoke **Go binaries**
-(same core as wasm for npm) so notebooks and services match Tide goldens.
-
-## Status
-
-Placeholder only — not on PyPI yet.
+API surface matches Go boards. **0.2+** ships / invokes Go binaries so notebooks
+match [`testdata/`](../testdata) goldens. No Python reimplementation of LPD.

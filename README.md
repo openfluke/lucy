@@ -20,11 +20,11 @@ the Go core version they claim.
 
 | Package | Channel | Version | Status | Notes |
 |---------|---------|---------|--------|-------|
-| **lucy** (monorepo) | git tag / [`VERSION`](VERSION) | `v0.0.0` | scaffold | Whole-repo release — bump when formulas or public boards change |
-| **Go core** `github.com/openfluke/lucy` | Go module | `v0.0.0` | placeholder | Source of truth; math still reference [welvet/lucy](https://github.com/openfluke/welvet/tree/main/lucy) |
-| **`@openfluke/lucy`** | npm | `0.0.0` | unpublished | Node/Bun + React/Angular/vanilla; wasm + binaries later — [`js/`](js/) |
-| **`openfluke-lucy`** | PyPI | `0.0.0` | unpublished | Wraps Go binaries — [`python/`](python/) |
-| **testdata goldens** | in-repo | `0.0.0` | example only | Lock step with Go core; all runtimes must match |
+| **lucy** (monorepo) | git tag / [`VERSION`](VERSION) | `v0.1.0` | measuring core live | Go `BuildLPD` + locked goldens; npm/PyPI types/API only until 0.2 |
+| **Go core** `github.com/openfluke/lucy` | Go module | `v0.1.0` | usable | Ported from welvet/lucy — Score / Q / LPD / bands |
+| **`@openfluke/lucy`** | npm | `0.1.0` | unpublished | Board types + constants; wasm/native at 0.2 — [`js/`](js/) |
+| **`openfluke-lucy`** | PyPI | `0.1.0` | unpublished | API stub; Go binary wrapper at 0.2 — [`python/`](python/) |
+| **testdata goldens** | in-repo | `0.1.0` | locked | [`testdata/goldens_lpd_v0.1.json`](testdata/goldens_lpd_v0.1.json) |
 | **charts / JPG** | in-repo | — | not started | Optional render path — [`charts/`](charts/) |
 
 **Scoreboard rules**
@@ -54,8 +54,8 @@ Milestone meaning (all channels share the story; patch bumps `0.x.y` do not add 
 
 | Cut | Intent |
 |-----|--------|
-| **0.0** | Repo + stubs only (you are here) |
-| **0.1** | Real `BuildLPD` + locked goldens; Go importable |
+| **0.0** | Repo + stubs only |
+| **0.1** | Real `BuildLPD` + locked goldens; Go importable ← **current** |
 | **0.2** | Host-facing boards API + npm/PyPI consuming Go artifacts |
 | **0.3** | Tide/Ocean/River-style charts usable from JS UI |
 | **1.0** | Portable ruler: wasm + binaries documented; one real host path; formulas tunable without forks |
@@ -202,19 +202,20 @@ lucy/
 
 ## Relationship to Welvet / Tide
 
-Today measuring math still lives in **`welvet/lucy`**. Tide dash / Ocean /
-River *display* it. This repo is the portable home so:
+**v0.1.0:** measuring math lives here in **`go/lucy`** (ported from
+[welvet/lucy](https://github.com/openfluke/welvet/tree/main/lucy)). Tide dash /
+Ocean / River still *display* boards today; they can switch imports to this
+module when ready.
 
-1. Go core can ship **wasm + binaries** without dragging all of Welvet
-2. npm / PyPI consumers get the same ruler
-3. Tide/Ocean/River can eventually **import** Lucy instead of owning a fork of the boards
+1. Go core can ship **wasm + binaries** (0.2+) without dragging all of Welvet
+2. npm / PyPI consumers get the same ruler (types at 0.1; artifacts at 0.2+)
+3. Tide/Ocean/River should eventually **import** Lucy instead of owning a fork of the boards
 
-Until the port lands, treat [welvet/lucy](https://github.com/openfluke/welvet/tree/main/lucy)
-as the reference implementation and keep goldens aligned.
+Goldens: [`testdata/goldens_lpd_v0.1.json`](testdata/goldens_lpd_v0.1.json).
 
 ---
 
-## Quick intent (when it is not a stub)
+## Quick intent
 
 ```go
 import "github.com/openfluke/lucy/lucy"
@@ -224,15 +225,13 @@ _ = board.Top // ranked by LPD, traps at 0
 ```
 
 ```ts
-import { buildLPD } from "@openfluke/lucy";
-
-const board = buildLPD(samples); // via wasm / native
+import { VERSION, KEEP_FLOOR, type Sample } from "@openfluke/lucy";
+// buildLPD via wasm/native — 0.2+
 ```
 
 ```python
-from lucy import build_lpd
-
-board = build_lpd(samples)  # via Go binary
+from lucy import __version__, KEEP_FLOOR
+# build_lpd via Go binary — 0.2+
 ```
 
 ---

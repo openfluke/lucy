@@ -1,21 +1,25 @@
 # go/ — Lucy measuring core
 
+**Version:** `0.1.0` (`lucy.Version`)
+
 Source of truth for **Score**, **Q**, **LPD** (Lucy Pareto density), gold / lean /
-trap, and related live-fit math.
+trap, and related live-fit math. Ported from `welvet/lucy` for a portable module.
 
-## Why Go first
+```bash
+cd go
+go test ./lucy/
+```
 
-- One implementation → **wasm** + **native binaries**
-- npm (`@openfluke/lucy`) and PyPI wrappers call this core — they do not reimplement formulas
-- Tide / Ocean / River become *hosts* that import Lucy instead of forking dash math
+```go
+import "github.com/openfluke/lucy/lucy"
 
-## Status
+board := lucy.BuildLPD(samples)
+_ = board.Top[0].LPD
+```
 
-Placeholder. Math still lives in [`welvet/lucy`](https://github.com/openfluke/welvet/tree/main/lucy)
-until it moves here with shared [`testdata/`](../testdata) goldens.
+Goldens: [`../testdata/goldens_lpd_v0.1.json`](../testdata/goldens_lpd_v0.1.json)
 
-## Later
+## Later (0.2+)
 
-- `GOOS=js GOARCH=wasm` (and/or TinyGo) artifacts for `@openfluke/lucy`
-- cross-compiled binaries for Python wheels / CLI
-- optional board → chart / JPG generation
+- wasm + native binaries for `@openfluke/lucy` / PyPI
+- optional board → chart / JPG

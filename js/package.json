@@ -1,7 +1,7 @@
 {
   "name": "@openfluke/lucy",
-  "version": "0.0.0",
-  "description": "Lucy live-fit measuring + boards — wasm/binaries from Go, UI for Node/Bun/React/Angular",
+  "version": "0.1.0",
+  "description": "Lucy live-fit measuring + boards \u2014 wasm/binaries from Go, UI for Node/Bun/React/Angular",
   "license": "Apache-2.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -17,8 +17,8 @@
     "README.md"
   ],
   "scripts": {
-    "build": "echo 'placeholder — wire tsc + wasm artifacts later'",
-    "test": "echo 'placeholder — compare against ../testdata goldens'"
+    "build": "echo 'placeholder \u2014 wire tsc + wasm artifacts later'",
+    "test": "echo 'placeholder \u2014 compare against ../testdata goldens'"
   },
   "keywords": [
     "lucy",
