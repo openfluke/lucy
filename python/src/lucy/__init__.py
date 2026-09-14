@@ -1,4 +1,4 @@
-"""Lucy measuring via Go binaries (openfluke-lucy 0.5.0)."""
+"""Lucy measuring via Go binaries (openfluke-lucy 0.6.0)."""
 
 from __future__ import annotations
 
@@ -9,10 +9,10 @@ from typing import Any, Mapping, MutableMapping, Optional, Sequence, TypedDict, 
 
 from ._bin import default_binary
 from .board import board_records, to_dataframe, top_rows
-from .charts import chart_jpg, chart_pack, chart_png, chart_svg, write_report
+from .charts import chart_jpg, chart_pack, chart_png, chart_svg, write_pdf, write_report
 from .client import LucyClient
 
-__version__ = "0.5.0"
+__version__ = "0.6.0"
 
 KEEP_FLOOR = 0.70
 GOLD_KEEP = 0.80
@@ -90,5 +90,6 @@ __all__ = [
     "chart_jpg",
     "chart_pack",
     "write_report",
+    "write_pdf",
     "LucyClient",
 ]

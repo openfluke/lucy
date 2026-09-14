@@ -15,6 +15,7 @@ from lucy import (
     chart_png,
     chart_svg,
     version,
+    write_pdf,
     write_report,
 )
 
@@ -22,16 +23,16 @@ from lucy import (
 class TestBuildLPD(unittest.TestCase):
     def setUp(self):
         root = Path(__file__).resolve().parents[2]
-        self.g = json.loads((root / "testdata" / "goldens_lpd_v0.5.json").read_text())
+        self.g = json.loads((root / "testdata" / "goldens_lpd_v0.6.json").read_text())
 
     def test_build_lpd_matches_golden(self):
-        self.assertEqual(__version__, "0.5.0")
-        self.assertEqual(version(), "0.5.0")
+        self.assertEqual(__version__, "0.6.0")
+        self.assertEqual(version(), "0.6.0")
         resp = build_lpd(self.g["samples"])
-        self.assertEqual(resp["version"], "0.5.0")
+        self.assertEqual(resp["version"], "0.6.0")
         self.assertEqual(resp["board"]["top"][0]["id"], self.g["expect"]["top"][0]["id"])
 
-    def test_charts_and_report(self):
+    def test_charts_report_pdf(self):
         self.assertTrue(board_records(build_lpd(self.g["samples"])))
         self.assertIn("<svg", chart_svg(self.g["samples"], "radar"))
         self.assertEqual(chart_png(self.g["samples"], "bars")[0], 0x89)
@@ -41,6 +42,10 @@ class TestBuildLPD(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             out = write_report(self.g["samples"], d)
             self.assertTrue((Path(out) / "index.html").exists())
+            self.assertTrue((Path(out) / "board.pdf").exists())
+            pdf_path = Path(d) / "direct.pdf"
+            write_pdf(self.g["samples"], pdf_path)
+            self.assertTrue(pdf_path.read_bytes().startswith(b"%PDF"))
 
 
 if __name__ == "__main__":

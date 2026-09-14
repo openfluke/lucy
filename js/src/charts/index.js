@@ -8,4 +8,5 @@ export {
   chartPackNative,
   chartJPGNative,
   writeReportNative,
+  writePDFNative,
 } from "./export.js";

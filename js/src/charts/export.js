@@ -118,3 +118,24 @@ export async function writeReportNative(samples, outdir, options) {
     child.stdin.end();
   });
 }
+
+export async function writePDFNative(samples, outPath, options) {
+  const { spawn } = await import("node:child_process");
+  const { resolveLucyBinary } = await import("../native.js");
+  const bin = await resolveLucyBinary();
+  const req = JSON.stringify({ samples, options });
+  return new Promise((resolve, reject) => {
+    const child = spawn(bin, ["pdf", outPath], { stdio: ["pipe", "pipe", "pipe"] });
+    let stdout = "";
+    let stderr = "";
+    child.stdout.on("data", (d) => (stdout += d));
+    child.stderr.on("data", (d) => (stderr += d));
+    child.on("error", reject);
+    child.on("close", (code) => {
+      if (code !== 0) reject(new Error(stderr || `lucy exited ${code}`));
+      else resolve(stdout.trim() || outPath);
+    });
+    child.stdin.write(req);
+    child.stdin.end();
+  });
+}

@@ -8,7 +8,7 @@ import { buildLPD, consciousnessSeries, lpdTableHTML, lpdScatterPoints, buildLPD
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 
 test("chart helpers from board", async () => {
-  const g = JSON.parse(await readFile(path.join(root, "testdata/goldens_lpd_v0.5.json"), "utf8"));
+  const g = JSON.parse(await readFile(path.join(root, "testdata/goldens_lpd_v0.6.json"), "utf8"));
   const { board } = await buildLPD(g.samples);
   const series = consciousnessSeries(board);
   assert.ok(series.length >= 1);
@@ -20,7 +20,7 @@ test("chart helpers from board", async () => {
 });
 
 test("native binary buildLPD matches wasm lead", async () => {
-  const g = JSON.parse(await readFile(path.join(root, "testdata/goldens_lpd_v0.5.json"), "utf8"));
+  const g = JSON.parse(await readFile(path.join(root, "testdata/goldens_lpd_v0.6.json"), "utf8"));
   const native = await buildLPDNative(g.samples);
   assert.equal(native.board.top[0].id, "int8");
 });

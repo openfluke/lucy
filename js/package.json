@@ -1,7 +1,7 @@
 {
   "name": "@openfluke/lucy",
-  "version": "0.5.0",
-  "description": "Lucy live-fit measuring + boards (wasm/native/serve, React, Angular CE, PNG/JPG reports)",
+  "version": "0.6.0",
+  "description": "Lucy live-fit measuring + boards (wasm/native/serve, React, Angular CE, PNG/JPG/PDF)",
   "license": "Apache-2.0",
   "type": "module",
   "main": "./src/index.js",

@@ -1,14 +1,15 @@
-# Host import guide (0.5)
+# Host import guide (0.6)
 
-Lucy does not train models. Feed finished cells → board (+ charts / report / HTTP).
+Lucy does not train models. Feed finished cells → board (+ charts / HTML / PDF / HTTP).
 
-## Go (replace welvet/lucy)
+## Go
 
 ```go
 import "github.com/openfluke/lucy/lucy"
 
 board := lucy.BuildLPD(samples)
-_ = lucy.WriteReportDir("out", board, 8)
+pdf, _ := lucy.BoardPDF(board, 8)
+_ = lucy.WriteReportDir("out", board, 8) // includes board.pdf
 http.ListenAndServe(":7474", lucy.Handler())
 ```
 
@@ -16,30 +17,21 @@ http.ListenAndServe(":7474", lucy.Handler())
 
 ```bash
 lucy build-lpd < request.json
-lucy chart-radar-png < request.json > radar.png
-lucy chart-radar-jpg < request.json > radar.jpg
 lucy report ./out < request.json
-lucy serve :7474
+lucy pdf ./board.pdf < request.json
+lucy serve :7474   # POST /api/lpd · /api/chart-pack · /api/pdf
 ```
 
-## Node / Bun / React
+## Node / Python
 
 ```js
-import { buildLPD, createLucyClient, writeReportNative } from "@openfluke/lucy";
-import { LucyBoard } from "@openfluke/lucy/react";
-
-const { board } = await buildLPD(samples);
-const client = createLucyClient("http://127.0.0.1:7474");
+import { writePDFNative, createLucyClient } from "@openfluke/lucy";
+await writePDFNative(samples, "./board.pdf");
 ```
 
-## Python
-
 ```python
-from lucy import build_lpd, write_report, LucyClient, chart_jpg
-
-resp = build_lpd(samples)
-write_report(samples, "./out")
-open("radar.jpg", "wb").write(chart_jpg(samples, "radar"))
+from lucy import write_pdf, LucyClient
+write_pdf(samples, "board.pdf")
 ```
 
 Rebuild: `./go/scripts/build-artifacts.sh`

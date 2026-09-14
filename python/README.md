@@ -1,11 +1,10 @@
 # python/ — `openfluke-lucy`
 
-**Version:** `0.5.0`
+**Version:** `0.6.0`
 
 ```python
-from lucy import build_lpd, chart_svg, chart_png, chart_pack
+from lucy import build_lpd, write_pdf, write_report, LucyClient
 
-resp = build_lpd(samples)
-open("radar.png", "wb").write(chart_png(samples, "radar"))
-pack = chart_pack(samples)  # svg + png_b64
+write_pdf(samples, "board.pdf")
+write_report(samples, "./out")  # includes board.pdf
 ```

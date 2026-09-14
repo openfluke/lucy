@@ -21,6 +21,17 @@ class LucyClient:
     def chart_pack(self, samples: Sequence[Mapping[str, Any]], options: Optional[Mapping[str, float]] = None) -> dict[str, Any]:
         return self._post("/api/chart-pack", {"samples": list(samples), "options": options})
 
+    def pdf(self, samples: Sequence[Mapping[str, Any]], options: Optional[Mapping[str, float]] = None) -> bytes:
+        data = json.dumps({"samples": list(samples), **({"options": options} if options else {})}).encode()
+        req = urllib.request.Request(
+            self.base_url + "/api/pdf",
+            data=data,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        with urllib.request.urlopen(req) as r:
+            return r.read()
+
     def _post(self, path: str, body: dict[str, Any]) -> dict[str, Any]:
         data = json.dumps({k: v for k, v in body.items() if v is not None}).encode()
         req = urllib.request.Request(

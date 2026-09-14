@@ -48,3 +48,8 @@ def chart_pack(samples, options=None, *, binary=None) -> dict[str, Any]:
 def write_report(samples, outdir: Union[str, Path], options=None, *, binary=None) -> str:
     out = _run(Path(binary) if binary else default_binary(), ["report", str(outdir)], samples, options)
     return out.decode().strip() or str(outdir)
+
+
+def write_pdf(samples, out_path, options=None, *, binary=None) -> str:
+    out = _run(Path(binary) if binary else default_binary(), ["pdf", str(out_path)], samples, options)
+    return out.decode().strip() or str(out_path)

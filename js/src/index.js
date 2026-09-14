@@ -1,6 +1,6 @@
 import { ensureWasm } from "./loadWasm.js";
 
-export const VERSION = "0.5.0";
+export const VERSION = "0.6.0";
 export const KEEP_FLOOR = 0.7;
 export const GOLD_KEEP = 0.8;
 export const LEAN_KEEP = 0.95;

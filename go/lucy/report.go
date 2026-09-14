@@ -49,6 +49,9 @@ func WriteReportDir(dir string, board LPD, max int) error {
 	if err := write("board.json", bj); err != nil {
 		return err
 	}
+	if pdf, err := BoardPDF(board, max); err == nil && len(pdf) > 0 {
+		_ = write("board.pdf", pdf)
+	}
 	html := fmt.Sprintf(`<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"/><title>Lucy board report</title>
 <style>

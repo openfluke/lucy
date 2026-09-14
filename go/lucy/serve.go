@@ -12,6 +12,7 @@ import (
 //	GET  /api/version
 //	POST /api/lpd          BuildRequest → BuildResponse
 //	POST /api/chart-pack   BuildRequest → chart-pack JSON (svg + png/jpg b64)
+//	POST /api/pdf          BuildRequest → application/pdf
 func Handler() http.Handler {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/api/version", func(w http.ResponseWriter, r *http.Request) {
@@ -36,6 +37,31 @@ func Handler() http.Handler {
 		w.Header().Set("Content-Type", "application/json")
 		enc := json.NewEncoder(w)
 		_ = enc.Encode(resp)
+	})
+	
+	mux.HandleFunc("/api/pdf", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.Error(w, "POST only", http.StatusMethodNotAllowed)
+			return
+		}
+		raw, err := io.ReadAll(r.Body)
+		if err != nil {
+			http.Error(w, err.Error(), 400)
+			return
+		}
+		resp, err := BuildFromJSON(raw)
+		if err != nil {
+			http.Error(w, err.Error(), 400)
+			return
+		}
+		pdf, err := BoardPDF(resp.Board, 8)
+		if err != nil {
+			http.Error(w, err.Error(), 500)
+			return
+		}
+		w.Header().Set("Content-Type", "application/pdf")
+		w.Header().Set("Content-Disposition", "attachment; filename=lucy-board.pdf")
+		_, _ = w.Write(pdf)
 	})
 	mux.HandleFunc("/api/chart-pack", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
@@ -62,7 +88,7 @@ func Handler() http.Handler {
 			return
 		}
 		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-		_, _ = io.WriteString(w, "lucy serve "+Version+"\nPOST /api/lpd\nPOST /api/chart-pack\nGET /api/version\n")
+		_, _ = io.WriteString(w, "lucy serve "+Version+"\nPOST /api/lpd\nPOST /api/chart-pack\nPOST /api/pdf\nGET /api/version\n")
 	})
 	return mux
 }

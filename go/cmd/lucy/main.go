@@ -82,6 +82,26 @@ func main() {
 			enc.SetIndent("", "  ")
 			_ = enc.Encode(lucy.ChartPackJSON(pack))
 		}
+	case "pdf":
+		if len(os.Args) < 3 {
+			fail(fmt.Errorf("usage: lucy pdf <out.pdf> < request.json"))
+		}
+		raw, err := io.ReadAll(os.Stdin)
+		if err != nil {
+			fail(err)
+		}
+		resp, err := lucy.BuildFromJSON(raw)
+		if err != nil {
+			fail(err)
+		}
+		pdf, err := lucy.BoardPDF(resp.Board, 8)
+		if err != nil {
+			fail(err)
+		}
+		if err := os.WriteFile(os.Args[2], pdf, 0o644); err != nil {
+			fail(err)
+		}
+		fmt.Println(os.Args[2])
 	case "report":
 		if len(os.Args) < 3 {
 			fail(fmt.Errorf("usage: lucy report <outdir> < request.json"))
