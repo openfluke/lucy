@@ -21,10 +21,23 @@ replace github.com/openfluke/lucy => ../lucy/go
 
 ## npm `@openfluke/lucy`
 
+Preferred (build + tests + pack gate + publish):
+
+```bash
+cd js
+bash publish.sh --dry-run   # build, test, pack list — no publish
+bash publish.sh             # interactive confirm
+bash publish.sh --yes       # CI / already decided
+```
+
+Manual:
+
 ```bash
 ./go/scripts/build-artifacts.sh
-cd js && npm publish --access public
+cd js && npm publish --access public --ignore-scripts
 ```
+
+Wasm is built into `js/wasm/` at publish time (not committed to git).
 
 ## PyPI `openfluke-lucy`
 
