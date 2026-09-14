@@ -11,9 +11,9 @@ import { resolveLucyBinary } from "../src/native.js";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 
 test("floorsNative + writeCSVNative", async () => {
-  assert.equal(VERSION, "1.0.0");
+  assert.equal(VERSION, "1.0.1");
   const floors = await floorsNative();
-  assert.equal(floors.version, "1.0.0");
+  assert.equal(floors.version, "1.0.1");
   assert.equal(floors.keep_floor, 0.7);
   const g = JSON.parse(await readFile(path.join(root, "testdata/goldens_lpd_v1.0.json"), "utf8"));
   const dir = await mkdtemp(path.join(tmpdir(), "lucy-csv-"));
@@ -32,7 +32,7 @@ test("lucy serve floors + csv", async () => {
     await new Promise((r) => setTimeout(r, 400));
     const client = createLucyClient("http://127.0.0.1:17476");
     const floors = await client.floors();
-    assert.equal(floors.version, "1.0.0");
+    assert.equal(floors.version, "1.0.1");
     const csv = await client.csv(g.samples);
     assert.ok(csv.startsWith("id,band,lpd,"));
   } finally {

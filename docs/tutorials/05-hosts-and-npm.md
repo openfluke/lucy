@@ -8,7 +8,7 @@ board := lucy.BuildLPD(samples)
 ```
 
 ```
-require github.com/openfluke/lucy v1.0.0
+require github.com/openfluke/lucy v1.0.1
 replace github.com/openfluke/lucy => ../lucy/go  // monorepo
 ```
 

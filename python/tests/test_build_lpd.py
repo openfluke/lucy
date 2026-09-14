@@ -28,10 +28,10 @@ class TestBuildLPD(unittest.TestCase):
         self.g = json.loads((root / "testdata" / "goldens_lpd_v1.0.json").read_text())
 
     def test_build_lpd_matches_golden(self):
-        self.assertEqual(__version__, "1.0.0")
-        self.assertEqual(version(), "1.0.0")
+        self.assertEqual(__version__, "1.0.1")
+        self.assertEqual(version(), "1.0.1")
         resp = build_lpd(self.g["samples"])
-        self.assertEqual(resp["version"], "1.0.0")
+        self.assertEqual(resp["version"], "1.0.1")
         self.assertEqual(resp["board"]["top"][0]["id"], self.g["expect"]["top"][0]["id"])
 
     def test_charts_report_pdf(self):
@@ -41,7 +41,7 @@ class TestBuildLPD(unittest.TestCase):
         self.assertEqual(chart_jpg(self.g["samples"], "radar")[0], 0xFF)
         pack = chart_pack(self.g["samples"])
         self.assertIn("bars_jpg_b64", pack)
-        self.assertEqual(floors()["version"], "1.0.0")
+        self.assertEqual(floors()["version"], "1.0.1")
         csv = board_csv(self.g["samples"])
         self.assertTrue(csv.startswith("id,band,lpd,"))
         with tempfile.TemporaryDirectory() as d:

@@ -37,12 +37,12 @@ the Go core version they claim.
 
 | Package | Channel | Version | Status | Notes |
 |---------|---------|---------|--------|-------|
-| **lucy** (monorepo) | git tag / [`VERSION`](VERSION) | `v1.0.0` | **stable** | portable claim · golden freeze · compare grid in site PDF |
-| **Go core** `github.com/openfluke/lucy` | Go module | `v1.0.0` | stable | `SitePDF` + compare · `lucy artifacts` · [`PORTABLE.md`](PORTABLE.md) |
-| **`@openfluke/lucy`** | npm | `1.0.0` | publish-ready | wasm + native + boards · same goldens |
-| **`openfluke-lucy`** | PyPI | `1.0.0` | publish-ready | binary wrap · notebook smoke example |
-| **testdata goldens** | in-repo | `1.0.0` | **frozen** | [`testdata/goldens_lpd_v1.0.json`](testdata/goldens_lpd_v1.0.json) |
-| **charts** | in-repo | `1.0.0` | site PDF pack | compare · near · LPD · thru · bands · charts |
+| **lucy** (monorepo) | git tag / [`VERSION`](VERSION) | `v1.0.1` | **stable** | portable claim · golden freeze · compare grid in site PDF |
+| **Go core** `github.com/openfluke/lucy` | Go module | `v1.0.1` | stable | `SitePDF` + compare · `lucy artifacts` · [`PORTABLE.md`](PORTABLE.md) |
+| **`@openfluke/lucy`** | npm | `1.0.1` | publish-ready | wasm + native + boards · same goldens |
+| **`openfluke-lucy`** | PyPI | `1.0.1` | publish-ready | binary wrap · notebook smoke example |
+| **testdata goldens** | in-repo | `1.0.1` | **frozen** (v1.0 vectors) | [`testdata/goldens_lpd_v1.0.json`](testdata/goldens_lpd_v1.0.json) |
+| **charts** | in-repo | `1.0.1` | site PDF pack | compare · near · LPD · thru · bands · charts |
 
 **Scoreboard rules**
 
@@ -100,7 +100,7 @@ All channels share one story. **Current = 1.0** (stable portable ruler).
 | 0.7 | `0.7.0` | `0.7.0` | `0.7.0` | `0.7.0` | [`v0.7`](testdata/goldens_lpd_v0.7.json) |
 | 0.8 | `0.8.0` | `0.8.0` | `0.8.0` publish-ready | `0.8.0` publish-ready | [`v0.8`](testdata/goldens_lpd_v0.8.json) |
 | 0.9 | `0.9.0` | `0.9.0` | `0.9.0` | `0.9.0` | [`v0.9`](testdata/goldens_lpd_v0.9.json) |
-| **1.0** | **`1.0.0`** | **`1.0.0`** | **`1.0.0`** | **`1.0.0`** | **[`v1.0`](testdata/goldens_lpd_v1.0.json)** |
+| **1.0** | **`1.0.1`** | **`1.0.1`** | **`1.0.1`** | **`1.0.1`** | **[`v1.0`](testdata/goldens_lpd_v1.0.json)** |
 
 ### Monorepo — what ships when
 
@@ -231,7 +231,7 @@ lucy/
 
 ## Relationship to Welvet / Tide
 
-**v1.0.0:** **portable measuring ruler** (stable).
+**v1.0.1:** **portable measuring ruler** (stable) — npm README / docs polish; same v1 golden vectors.
 
 - Claim: [`PORTABLE.md`](PORTABLE.md) — one core, many skins; floors without forks
 - Go: `SitePDF` (+ compare mode×dtype×arch) · `lucy artifacts` · Tide imports `github.com/openfluke/lucy/lucy`

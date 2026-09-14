@@ -1,21 +1,21 @@
 # Publishing Lucy 1.0+
 
-Channels share one version (`VERSION`). **v1.0.0** is the stable portable cut.
+Channels share one version (`VERSION`). **v1.0.1** is the stable portable cut.
 
 Publish **Go tag first**, then npm, then PyPI.
 
 ## Go module
 
 ```bash
-git tag v1.0.0
-git push origin v1.0.0
-go get github.com/openfluke/lucy@v1.0.0
+git tag v1.0.1
+git push origin v1.0.1
+go get github.com/openfluke/lucy@v1.0.1
 ```
 
 Local monorepo replace (Tide):
 
 ```
-require github.com/openfluke/lucy v1.0.0
+require github.com/openfluke/lucy v1.0.1
 replace github.com/openfluke/lucy => ../lucy/go
 ```
 
