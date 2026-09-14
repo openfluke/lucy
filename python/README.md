@@ -1,11 +1,9 @@
 # python/ — `openfluke-lucy`
 
-**Version:** `0.7.0`
+**Version:** `0.8.0` (publish-ready)
 
 ```python
-from lucy import build_lpd, board_csv, floors, write_pdf, write_report
-
-floors()
-board_csv(samples)
-write_report(samples, "./out")  # includes board.pdf + board.csv
+from lucy import build_lpd, board_csv, floors, write_pdf
 ```
+
+Publish: [`../PUBLISH.md`](../PUBLISH.md).

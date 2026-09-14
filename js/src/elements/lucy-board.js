@@ -8,8 +8,18 @@ const Base =
     ? HTMLElement
     : class {};
 
+/**
+ * <lucy-board board-json='...'> — Tide/Ocean/Angular-friendly custom element.
+ *
+ * CSS vars: --lucy-bg, --lucy-fg, --lucy-muted, --lucy-gap
+ */
 export class LucyBoardElement extends Base {
+  static get observedAttributes() {
+    return ["board-json"];
+  }
+
   #board = null;
+
   set board(v) {
     this.#board = v;
     this.render();
@@ -17,14 +27,36 @@ export class LucyBoardElement extends Base {
   get board() {
     return this.#board;
   }
-  connectedCallback() {
+
+  attributeChangedCallback() {
+    this.#syncFromAttrs();
     this.render();
   }
+
+  connectedCallback() {
+    this.#syncFromAttrs();
+    this.render();
+  }
+
+  #syncFromAttrs() {
+    if (typeof this.getAttribute !== "function") return;
+    const raw = this.getAttribute("board-json");
+    if (raw) {
+      try {
+        this.#board = JSON.parse(raw);
+      } catch {
+        /* keep previous */
+      }
+    }
+  }
+
   render() {
     if (typeof document === "undefined") return;
     this.innerHTML = "";
     const root = document.createElement("div");
     root.className = "lucy-board";
+    root.style.cssText =
+      "display:grid;gap:var(--lucy-gap,1rem);background:var(--lucy-bg,transparent);color:var(--lucy-fg,inherit);";
     const live = document.createElement("canvas");
     live.width = 960;
     live.height = 480;
@@ -35,10 +67,11 @@ export class LucyBoardElement extends Base {
     scat.width = 960;
     scat.height = 440;
     const table = document.createElement("div");
+    table.className = "lucy-board__table";
     root.append(live, dens, scat, table);
     this.append(root);
     if (!this.#board) {
-      table.textContent = "no board";
+      table.innerHTML = "<p class=\"lucy-empty\" style=\"color:var(--lucy-muted,#888)\">no board</p>";
       return;
     }
     drawRadar(live, consciousnessSeries(this.#board), { title: "Consciousness radar" });

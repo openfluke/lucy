@@ -20,12 +20,12 @@ the Go core version they claim.
 
 | Package | Channel | Version | Status | Notes |
 |---------|---------|---------|--------|-------|
-| **lucy** (monorepo) | git tag / [`VERSION`](VERSION) | `v0.7.0` | host cutover | cover+table PDF · CSV · floors API · examples / MIGRATE |
-| **Go core** `github.com/openfluke/lucy` | Go module | `v0.7.0` | usable | + `BoardCSV` · richer `BoardPDF` · `FloorsMap` · `/api/csv` `/api/floors` |
-| **`@openfluke/lucy`** | npm | `0.7.0` | ready (unpublished) | + `writeCSVNative` · `floorsNative` · client `.csv()` / `.floors()` |
-| **`openfluke-lucy`** | PyPI | `0.7.0` | ready (unpublished) | + `board_csv` · `floors` · `LucyClient.csv/floors` |
-| **testdata goldens** | in-repo | `0.7.0` | locked | [`testdata/goldens_lpd_v0.7.json`](testdata/goldens_lpd_v0.7.json) |
-| **charts** | in-repo | `0.7.0` | SVG/PNG/JPG/PDF+CSV | Tide/River full-site PDF parity still → 1.0 |
+| **lucy** (monorepo) | git tag / [`VERSION`](VERSION) | `v0.8.0` | publish + Tide | Tide imports `github.com/openfluke/lucy/lucy`; publish checklist |
+| **Go core** `github.com/openfluke/lucy` | Go module | `v0.8.0` | usable | host path live in Tide (`replace` / tag) |
+| **`@openfluke/lucy`** | npm | `0.8.0` | publish-ready | Angular CE `board-json` attrs · [`PUBLISH.md`](PUBLISH.md) |
+| **`openfluke-lucy`** | PyPI | `0.8.0` | publish-ready | same version lock · [`PUBLISH.md`](PUBLISH.md) |
+| **testdata goldens** | in-repo | `0.8.0` | locked | [`testdata/goldens_lpd_v0.8.json`](testdata/goldens_lpd_v0.8.json) |
+| **charts** | in-repo | `0.8.0` | SVG/PNG/JPG/PDF+CSV | Tide/River full-site PDF parity → 0.9 / 1.0 |
 
 **Scoreboard rules**
 
@@ -51,7 +51,7 @@ the Go core version they claim.
 
 Legend: **—** not in that cut · **○** scaffold / stub · **◐** partial · **●** done for that version · **◇** planned.
 
-All channels share one story. **Current = 0.7.** Next planned cuts: **0.8 → 0.9 → 1.0**.
+All channels share one story. **Current = 0.8.** Next planned cuts: **0.9 → 1.0**.
 
 ### Release line (all versions)
 
@@ -64,8 +64,8 @@ All channels share one story. **Current = 0.7.** Next planned cuts: **0.8 → 0.
 | **0.4** | shipped | PNG export + chart-pack + golden CI |
 | **0.5** | shipped | JPG + HTML report + `lucy serve` HTTP API |
 | **0.6** | shipped | Multi-page PDF board report (chart pages) |
-| **0.7** | **current** | Host cutover kit: cover+table PDF · CSV · floors · examples / MIGRATE |
-| **0.8** | planned | Publish channels + Tide import switch (`github.com/openfluke/lucy/lucy`) |
+| **0.7** | shipped | Host cutover kit: cover+table PDF · CSV · floors · examples / MIGRATE |
+| **0.8** | **current** | Publish channels + Tide import switch (`github.com/openfluke/lucy/lucy`) |
 | **0.9** | planned | Tide/River PDF parity (compare / near / LPD / thru packs) |
 | **1.0** | planned | Portable claim: wasm+binaries documented; no host owns a fork; floors tunable without forks |
 
@@ -79,8 +79,8 @@ All channels share one story. **Current = 0.7.** Next planned cuts: **0.8 → 0.
 | 0.4 | `0.4.0` | `0.4.0` | `0.4.0` | `0.4.0` | `v0.4` |
 | 0.5 | `0.5.0` | `0.5.0` | `0.5.0` | `0.5.0` | `v0.5` |
 | 0.6 | `0.6.0` | `0.6.0` | `0.6.0` | `0.6.0` | `v0.6` |
-| **0.7** | **`0.7.0`** | **`0.7.0`** | **`0.7.0`** | **`0.7.0`** | **[`v0.7`](testdata/goldens_lpd_v0.7.json)** |
-| 0.8 | `0.8.0` ◇ | `0.8.0` ◇ | publish ◇ | publish ◇ | `v0.8` ◇ |
+| 0.7 | `0.7.0` | `0.7.0` | `0.7.0` | `0.7.0` | [`v0.7`](testdata/goldens_lpd_v0.7.json) |
+| **0.8** | **`0.8.0`** | **`0.8.0`** | **`0.8.0`** publish-ready | **`0.8.0`** publish-ready | **[`v0.8`](testdata/goldens_lpd_v0.8.json)** |
 | 0.9 | `0.9.0` ◇ | `0.9.0` ◇ | `0.9.0` ◇ | `0.9.0` ◇ | `v0.9` ◇ |
 | 1.0 | `1.0.0` ◇ | `1.0.0` ◇ | `1.0.0` ◇ | `1.0.0` ◇ | `v1.0` ◇ |
 
@@ -92,7 +92,7 @@ All channels share one story. **Current = 0.7.** Next planned cuts: **0.8 → 0.
 | Shared goldens + cross-runtime CI | ● | ● | ● | ● | ● |
 | Host import guide + examples / MIGRATE | ◐ | ● | ● | ● | ● |
 | Chart / JPG / PDF / CSV export path | ● | ● | ● | ● | ● |
-| npm + PyPI **published** | — | — | ● | ● | ● |
+| npm + PyPI **published** | — | — | ◐ ready | ● | ● |
 | Tide imports `github.com/openfluke/lucy/lucy` | — | ◐ docs | ● | ● | ● |
 | Tide/River full-site PDF packs | — | ◐ board | ◐ | ● | ● |
 | v1 portable claim (no host owns a fork) | — | — | ◐ | ◐ | ● |
@@ -117,7 +117,7 @@ All channels share one story. **Current = 0.7.** Next planned cuts: **0.8 → 0.
 | Wasm + native measuring · React / CE boards | ● | ● | ● | ● | ● |
 | PNG / JPG / PDF / report / serve client | ● | ● | ● | ● | ● |
 | CSV + floors helpers | — | ● | ● | ● | ● |
-| **Published** to npm | — | — | ● | ● | ● |
+| **Published** to npm | — | — | ◐ ready | ● | ● |
 | Angular CE polish | ◐ | ◐ | ● | ● | ● |
 | Tide/River PDF client parity | — | ◐ | ◐ | ● | ● |
 | Tunable floors documented end-to-end | ◐ | ● | ● | ● | ● |
@@ -128,7 +128,7 @@ All channels share one story. **Current = 0.7.** Next planned cuts: **0.8 → 0.
 |---------|:----:|:---:|:---:|:---:|:---:|
 | Binary wrap · `build_lpd` · chart / report / PDF | ● | ● | ● | ● | ● |
 | CSV · floors · DataFrame helpers | ◐ | ● | ● | ● | ● |
-| **Published** to PyPI | — | — | ● | ● | ● |
+| **Published** to PyPI | — | — | ◐ ready | ● | ● |
 | Notebook examples | ◐ | ◐ | ● | ● | ● |
 | Tide/River PDF helpers | — | ◐ | ◐ | ● | ● |
 
@@ -213,17 +213,17 @@ lucy/
 
 ## Relationship to Welvet / Tide
 
-**v0.7.0:** measuring + boards + **host cutover kit**.
+**v0.8.0:** measuring + boards + **publish + Tide import switch**.
 
-- Go: richer `BoardPDF` (cover + table + charts) · `BoardCSV` · `FloorsMap` · `lucy csv` / `lucy floors`
-- npm: `writeCSVNative` · `floorsNative` · `createLucyClient().csv()` / `.floors()`
-- Python: `board_csv` · `floors` · `LucyClient.csv` / `.floors`
+- Go: Tide hosts import `github.com/openfluke/lucy/lucy` (see Tide `go.mod` replace)
+- npm: Angular CE `board-json` · publish checklist [`PUBLISH.md`](PUBLISH.md)
+- Python: publish-ready · same version lock
 - Host path: [`MIGRATE.md`](MIGRATE.md) · [`examples/`](examples/) · [`HOST.md`](HOST.md)
-- CI: [`scripts/check-goldens.sh`](scripts/check-goldens.sh)
+- CI: [`scripts/check-goldens.sh`](scripts/check-goldens.sh) · [`scripts/publish-check.sh`](scripts/publish-check.sh)
 
 Rebuild: `./go/scripts/build-artifacts.sh`
 
-Goldens: [`testdata/goldens_lpd_v0.7.json`](testdata/goldens_lpd_v0.7.json).
+Goldens: [`testdata/goldens_lpd_v0.8.json`](testdata/goldens_lpd_v0.8.json).
 
 ---
 

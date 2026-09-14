@@ -1,11 +1,6 @@
-# Migrating hosts to Lucy 0.7
+# Migrating hosts to Lucy 0.8
 
-Lucy is the portable measuring core. Hosts (Tide, Ocean, River, labs) should
-**import** it — not copy formulas.
-
-## Go (from `welvet/lucy`)
-
-Change imports:
+## Go (from `welvet/lucy`) — **Tide has switched**
 
 ```go
 // before
@@ -15,11 +10,9 @@ import "github.com/openfluke/welvet/lucy"
 import "github.com/openfluke/lucy/lucy"
 ```
 
-API surface used by Tide today (`Sample`, `BuildLPD`, `SoftAcc*`, `Finalize`,
-floors constants) lives under `github.com/openfluke/lucy/lucy`.
-
-```bash
-go get github.com/openfluke/lucy@v0.7.0
+```
+require github.com/openfluke/lucy v0.8.0
+replace github.com/openfluke/lucy => ../lucy/go   // local monorepo
 ```
 
 Tune floors without forking:
@@ -28,23 +21,11 @@ Tune floors without forking:
 board := lucy.BuildLPDWithOptions(samples, lucy.DensityOptions{KeepFloor: 0.75})
 ```
 
-Or inspect defaults: `lucy floors` / `GET /api/floors`.
+## Node / Python / publish
 
-## Node / Bun
+See [`PUBLISH.md`](PUBLISH.md) and [`examples/`](examples/).
 
-```js
-import { buildLPD, writeCSVNative, writePDFNative } from "@openfluke/lucy";
-```
+## What 0.9 / 1.0 still own
 
-Or point a UI at `lucy serve` via `createLucyClient()`.
-
-## Python
-
-```python
-from lucy import build_lpd, board_csv, write_pdf, floors
-```
-
-## What 1.0 still owns
-
-- Tide/River **full-site** PDF parity (compare + near + thru packs)
-- Documented “no host owns a fork” cutover complete in Tide itself
+- **0.9** Tide/River full-site PDF parity
+- **1.0** portable claim + published channels as the default story

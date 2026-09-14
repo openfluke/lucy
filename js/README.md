@@ -1,10 +1,9 @@
 # `@openfluke/lucy`
 
-**Version:** `0.7.0`
+**Version:** `0.8.0` (publish-ready)
 
-Measuring + boards + `writeCSVNative` / `floorsNative` / PDF / serve client.
+Angular: see [`examples/angular.md`](examples/angular.md). Publish: [`../PUBLISH.md`](../PUBLISH.md).
 
 ```bash
-cd js && npm test
-../scripts/check-goldens.sh
+cd js && npm test && npm publish --dry-run
 ```

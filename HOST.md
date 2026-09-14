@@ -1,45 +1,26 @@
-# Host import guide (0.7)
+# Host import guide (0.8)
 
 Lucy does not train models. Feed finished cells → board (+ charts / HTML / PDF / CSV / HTTP).
 
-## Go
+## Go (Tide path)
 
 ```go
 import "github.com/openfluke/lucy/lucy"
 
 board := lucy.BuildLPD(samples)
-_ = lucy.BoardCSV(board)
-pdf, _ := lucy.BoardPDF(board, 8) // cover + table + charts
-_ = lucy.WriteReportDir("out", board, 8)
-http.ListenAndServe(":7474", lucy.Handler())
 ```
 
-## CLI
+Dev replace in host `go.mod`:
 
-```bash
-lucy floors
-lucy build-lpd < request.json
-lucy csv < request.json > board.csv
-lucy report ./out < request.json
-lucy pdf ./board.pdf < request.json
-lucy serve :7474
-# GET /api/floors · POST /api/lpd · /api/chart-pack · /api/pdf · /api/csv
+```
+require github.com/openfluke/lucy v0.8.0
+replace github.com/openfluke/lucy => ../lucy/go
 ```
 
-## Node / Python
+See [`MIGRATE.md`](MIGRATE.md) · [`PUBLISH.md`](PUBLISH.md).
 
-```js
-import { writeCSVNative, writePDFNative, floorsNative, createLucyClient } from "@openfluke/lucy";
-await floorsNative();
-await writeCSVNative(samples, "./board.csv");
-```
+## CLI / serve / npm / Python
 
-```python
-from lucy import board_csv, write_pdf, floors, LucyClient
-floors()
-board_csv(samples)
-```
+Same as 0.7 (`floors`, `csv`, `pdf`, `report`, `serve`) plus Angular CE `board-json` attrs.
 
-Migration from `welvet/lucy`: [`MIGRATE.md`](MIGRATE.md).  
-Examples: [`examples/`](examples/).  
 Rebuild: `./go/scripts/build-artifacts.sh`

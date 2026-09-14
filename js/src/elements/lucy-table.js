@@ -5,9 +5,19 @@ const Base =
     ? HTMLElement
     : class {};
 
-/** <lucy-lpd-table> — set .board = LPD board. */
+/**
+ * <lucy-lpd-table board-json='{"top":[...]}'>
+ * or element.board = boardObject
+ *
+ * Angular-friendly: bind [attr.board-json]="board | json"
+ */
 export class LucyLPDTableElement extends Base {
+  static get observedAttributes() {
+    return ["board-json", "max"];
+  }
+
   #board = null;
+
   set board(v) {
     this.#board = v;
     this.render();
@@ -15,12 +25,36 @@ export class LucyLPDTableElement extends Base {
   get board() {
     return this.#board;
   }
-  connectedCallback() {
+
+  attributeChangedCallback() {
+    this.#syncFromAttrs();
     this.render();
   }
+
+  connectedCallback() {
+    this.#syncFromAttrs();
+    this.render();
+  }
+
+  #syncFromAttrs() {
+    if (typeof this.getAttribute !== "function") return;
+    const raw = this.getAttribute("board-json");
+    if (raw) {
+      try {
+        this.#board = JSON.parse(raw);
+      } catch {
+        /* keep previous */
+      }
+    }
+  }
+
   render() {
     if (typeof document === "undefined") return;
-    this.innerHTML = this.#board ? lpdTableHTML(this.#board) : "<p>no board</p>";
+    const maxAttr = this.getAttribute?.("max");
+    const max = maxAttr ? Number(maxAttr) : undefined;
+    this.innerHTML = this.#board
+      ? lpdTableHTML(this.#board, max ? { max } : undefined)
+      : "<p class=\"lucy-empty\">no board</p>";
   }
 }
 

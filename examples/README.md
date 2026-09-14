@@ -1,6 +1,6 @@
 # examples/
 
-Minimal host cutovers for Lucy **0.7**.
+Minimal host cutovers for Lucy **0.8**.
 
 | Path | Runtime |
 |------|---------|
