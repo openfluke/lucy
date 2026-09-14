@@ -1,18 +1,14 @@
-# Migrating hosts to Lucy 0.8
+# Migrating hosts to Lucy 1.0
 
-## Go (from `welvet/lucy`) — **Tide has switched**
+## Go (from `welvet/lucy`) — **done in Tide**
 
 ```go
-// before
-import "github.com/openfluke/welvet/lucy"
-
-// after
 import "github.com/openfluke/lucy/lucy"
 ```
 
 ```
-require github.com/openfluke/lucy v0.8.0
-replace github.com/openfluke/lucy => ../lucy/go   // local monorepo
+require github.com/openfluke/lucy v1.0.0
+replace github.com/openfluke/lucy => ../lucy/go   // local
 ```
 
 Tune floors without forking:
@@ -21,14 +17,16 @@ Tune floors without forking:
 board := lucy.BuildLPDWithOptions(samples, lucy.DensityOptions{KeepFloor: 0.75})
 ```
 
-## Node / Python / publish
+## Portable claim
 
-See [`PUBLISH.md`](PUBLISH.md) and [`examples/`](examples/).
+See [`PORTABLE.md`](PORTABLE.md). Do not copy formulas into hosts.
 
-## What 1.0 still owns
+## Node / Python
 
-- Portable claim + published channels as default
-- Optional Tide compare mode×dtype PDF grids inside Lucy
+```js
+import { buildLPD, writeSitePDFNative } from "@openfluke/lucy";
+```
 
-- **0.9** Tide/River full-site PDF parity
-- **1.0** portable claim + published channels as the default story
+```python
+from lucy import build_lpd, write_site_pdf, floors
+```

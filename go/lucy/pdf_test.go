@@ -9,9 +9,9 @@ import (
 
 func TestBoardPDF(t *testing.T) {
 	board := lucy.BuildLPD([]lucy.Sample{
-		{ID: "f32", Acc: 90, Thru: 200, Avail: 40, Score: 100, RAMKiB: 1000},
-		{ID: "int8", Acc: 82, Thru: 180, Avail: 38, Score: 85, RAMKiB: 180},
-		{ID: "bin", Acc: 12, Thru: 400, Avail: 50, Score: 40, RAMKiB: 40},
+		{ID: "f32", Mode: "sgd", DType: "float32", Arch: "single", Acc: 90, Thru: 200, Avail: 40, Score: 100, RAMKiB: 1000},
+		{ID: "int8", Mode: "sgd", DType: "int8", Arch: "single", Acc: 82, Thru: 180, Avail: 38, Score: 85, RAMKiB: 180},
+		{ID: "bin", Mode: "sgd", DType: "binary", Arch: "single", Acc: 12, Thru: 400, Avail: 50, Score: 40, RAMKiB: 40},
 	})
 	pdf, err := lucy.SitePDF(board, 8)
 	if err != nil {
@@ -29,6 +29,7 @@ func TestBoardPDF(t *testing.T) {
 		"Acc keep band",
 		"Throughput ranking",
 		"Gold / lean / trap bands",
+		"Compare — mode",
 	} {
 		if !bytes.Contains(pdf, []byte(want)) {
 			t.Fatalf("missing %q", want)

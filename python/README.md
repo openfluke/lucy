@@ -1,9 +1,5 @@
 # python/ — `openfluke-lucy`
 
-**Version:** `0.9.0` (publish-ready)
+**Version:** `1.0.0` (stable / publish-ready)
 
-```python
-from lucy import build_lpd, board_csv, floors, write_pdf
-```
-
-Publish: [`../PUBLISH.md`](../PUBLISH.md).
+Wraps Go binaries — no Python re-impl. Notebook smoke: [`../examples/python/notebook_smoke.py`](../examples/python/notebook_smoke.py).

@@ -1,12 +1,11 @@
 # go/ — Lucy measuring core
 
-**Version:** `0.9.0`
+**Version:** `1.0.0` (stable)
 
 ```go
 import "github.com/openfluke/lucy/lucy"
 board := lucy.BuildLPD(samples)
+pdf, _ := lucy.SitePDF(board, 8)
 ```
 
-Hosts (Tide): `replace github.com/openfluke/lucy => ../lucy/go`
-
-CLI: `build-lpd` · `floors` · `csv` · `chart-*` · `report` · `pdf` · `serve`
+See [`../PORTABLE.md`](../PORTABLE.md).

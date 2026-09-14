@@ -11,7 +11,7 @@ import { resolveLucyBinary } from "../src/native.js";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 
 test("jpg + report dir", async () => {
-  const g = JSON.parse(await readFile(path.join(root, "testdata/goldens_lpd_v0.9.json"), "utf8"));
+  const g = JSON.parse(await readFile(path.join(root, "testdata/goldens_lpd_v1.0.json"), "utf8"));
   const jpg = await chartJPGNative(g.samples, "radar");
   assert.equal(jpg[0], 0xff);
   assert.equal(jpg[1], 0xd8);
@@ -23,7 +23,7 @@ test("jpg + report dir", async () => {
 
 test("lucy serve /api/lpd", async () => {
   const bin = await resolveLucyBinary();
-  const g = JSON.parse(await readFile(path.join(root, "testdata/goldens_lpd_v0.9.json"), "utf8"));
+  const g = JSON.parse(await readFile(path.join(root, "testdata/goldens_lpd_v1.0.json"), "utf8"));
   const child = spawn(bin, ["serve", "127.0.0.1:17474"], { stdio: ["ignore", "ignore", "pipe"] });
   try {
     await new Promise((r) => setTimeout(r, 400));

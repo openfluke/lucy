@@ -1,9 +1,5 @@
 # `@openfluke/lucy`
 
-**Version:** `0.9.0` (publish-ready)
+**Version:** `1.0.0` (stable / publish-ready)
 
-Angular: see [`examples/angular.md`](examples/angular.md). Publish: [`../PUBLISH.md`](../PUBLISH.md).
-
-```bash
-cd js && npm test && npm publish --dry-run
-```
+Portable measuring via wasm or native binary. See [`../PORTABLE.md`](../PORTABLE.md).

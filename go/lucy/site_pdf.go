@@ -7,14 +7,15 @@ import (
 )
 
 // SitePDF builds the Tide/River-parity board pack:
-// cover · Acc-keep (near) · LPD ranking · throughput · gold/lean/trap · chart pages.
-// Pure board-derived (no Tide Store / gofpdf). Compare mode×dtype grids stay host-side.
+// cover · compare(mode×dtype×arch) · Acc-keep · LPD · thru · bands · charts.
+// Pure board-derived (no Tide Store / gofpdf). Tide Store-only grids remain optional host polish.
 func SitePDF(board LPD, maxSeries int) ([]byte, error) {
 	if maxSeries <= 0 {
 		maxSeries = 8
 	}
 	pages := []pdfPage{
 		coverPage(board),
+		compareGridPage(board),
 		nearPage(board),
 		tablePage(board),
 		thruPage(board),

@@ -1,19 +1,19 @@
-# Host import guide (0.9)
+# Host import guide (1.0)
 
-## Go
+Lucy is the portable measuring core. Feed finished cells → board / site PDF / CSV / HTTP.
 
 ```go
 import "github.com/openfluke/lucy/lucy"
 
-board := lucy.BuildLPD(samples)
-pdf, _ := lucy.SitePDF(board, 8) // near · LPD · thru · bands · charts
+board := lucy.BuildLPDWithOptions(samples, lucy.DensityOptions{KeepFloor: 0.7})
+pdf, _ := lucy.SitePDF(board, 8) // compare · near · LPD · thru · bands · charts
 ```
-
-## CLI / HTTP
 
 ```bash
+lucy floors
+lucy artifacts
 lucy site-pdf ./site.pdf < request.json
-lucy serve :7474   # POST /api/site-pdf · /api/pdf
+lucy serve :7474
 ```
 
-Rebuild: `./go/scripts/build-artifacts.sh`
+Portable claim: [`PORTABLE.md`](PORTABLE.md) · Migrate: [`MIGRATE.md`](MIGRATE.md) · Publish: [`PUBLISH.md`](PUBLISH.md)

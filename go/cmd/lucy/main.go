@@ -26,6 +26,21 @@ func main() {
 		enc := json.NewEncoder(os.Stdout)
 		enc.SetIndent("", "  ")
 		_ = enc.Encode(lucy.FloorsMap())
+	case "artifacts":
+		enc := json.NewEncoder(os.Stdout)
+		enc.SetIndent("", "  ")
+		_ = enc.Encode(map[string]any{
+			"version": lucy.Version,
+			"portable": true,
+			"binaries": []string{
+				"lucy-linux-amd64", "lucy-linux-arm64",
+				"lucy-darwin-amd64", "lucy-darwin-arm64",
+				"lucy-windows-amd64.exe",
+			},
+			"wasm": []string{"lucy.wasm", "wasm_exec.js"},
+			"build": "./go/scripts/build-artifacts.sh",
+			"docs":  "PORTABLE.md",
+		})
 	case "chart-radar", "chart-scatter", "chart-bars",
 		"chart-radar-png", "chart-scatter-png", "chart-bars-png",
 		"chart-radar-jpg", "chart-scatter-jpg", "chart-bars-jpg", "chart-pack":
@@ -170,6 +185,7 @@ func usage() {
 Usage:
   lucy version
   lucy floors
+  lucy artifacts
   lucy build-lpd < request.json
   lucy chart-radar|chart-scatter|chart-bars < request.json
   lucy chart-*-png|chart-*-jpg < request.json

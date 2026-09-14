@@ -11,7 +11,7 @@ import { resolveLucyBinary } from "../src/native.js";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 
 test("writePDFNative produces PDF", async () => {
-  const g = JSON.parse(await readFile(path.join(root, "testdata/goldens_lpd_v0.9.json"), "utf8"));
+  const g = JSON.parse(await readFile(path.join(root, "testdata/goldens_lpd_v1.0.json"), "utf8"));
   const dir = await mkdtemp(path.join(tmpdir(), "lucy-pdf-"));
   const out = path.join(dir, "board.pdf");
   await writePDFNative(g.samples, out);
@@ -21,7 +21,7 @@ test("writePDFNative produces PDF", async () => {
 
 test("lucy serve /api/pdf", async () => {
   const bin = await resolveLucyBinary();
-  const g = JSON.parse(await readFile(path.join(root, "testdata/goldens_lpd_v0.9.json"), "utf8"));
+  const g = JSON.parse(await readFile(path.join(root, "testdata/goldens_lpd_v1.0.json"), "utf8"));
   const child = spawn(bin, ["serve", "127.0.0.1:17475"], { stdio: ["ignore", "ignore", "pipe"] });
   try {
     await new Promise((r) => setTimeout(r, 400));
