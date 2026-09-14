@@ -35,3 +35,14 @@ cd python && python -m build && twine upload dist/*
 
 Check alignment: `./scripts/publish-check.sh`  
 Portable claim: [`PORTABLE.md`](PORTABLE.md)
+
+## GitHub release (tag + notes + binaries)
+
+```bash
+./scripts/release.sh           # dry-run: checks, builds, example smoke, prints notes
+./scripts/release.sh --push    # git tag vX.Y.Z + gh release + upload artifacts
+```
+
+Release body includes **what Lucy is/isn’t**, quickstart/example pointers, and
+attaches linux/darwin/windows binaries + `lucy.wasm`.
+

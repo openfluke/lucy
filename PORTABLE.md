@@ -1,5 +1,8 @@
 # Portable claim (Lucy 1.0)
 
+> **Not a Tide/Ocean/River rewrite.** Lucy is the measuring ruler + boards/exports.
+> Hosts still own training, serving, and product UI — they **import** this package.
+
 **No host owns a fork of the ruler.** Tide / Ocean / River / labs **import**
 `github.com/openfluke/lucy/lucy` (or `@openfluke/lucy` / `openfluke-lucy`).
 Formulas live here. Floors are knobs, not copy-paste.

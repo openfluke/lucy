@@ -36,3 +36,10 @@ Tune experiments with options — do not fork the formula package:
 ```
 
 Next: [01-quickstart](01-quickstart.md).
+
+## What we did *not* recreate
+
+Lucy is **not** a port of Tide / Ocean / River as apps. Sweep runners, datasets,
+dashboards, and River’s store stay in those repos. Lucy owns formulas + boards so
+hosts stay thin: train/serve → samples → Lucy → boards / PDF.
+

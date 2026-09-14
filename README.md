@@ -10,6 +10,23 @@ Score/MiB trap.
 This repo exists so you (and others) stop copying dash math into every host.
 One core, many skins.
 
+
+## What Lucy is / isn’t
+
+**Lucy is not Tide, Ocean, or River.** Those hosts still train, serve, store runs,
+and render dashboards. Lucy is the **portable measuring + boards layer** they were
+rebuilding in place — so no host owns a fork of the ruler.
+
+| Lucy **is** | Lucy **is not** |
+|-------------|-----------------|
+| Score · Q · **LPD** · gold/lean/trap bands | A serve+train framework |
+| Boards, charts, CSV, site PDF, `lucy serve` | Tide’s permute matrix / live runner |
+| Go / wasm / npm / PyPI skins over **one** Go core | River’s results store + full-site UI |
+| Floors you tune **without** forking formulas | A drop-in replacement for Ocean/Tide apps |
+
+**Hosts feed finished cells → Lucy returns boards / graphs / PDFs.**  
+See [`PORTABLE.md`](PORTABLE.md) · [`docs/tutorials/00-why-lucy.md`](docs/tutorials/00-why-lucy.md).
+
 ---
 
 ## Version scoreboard
@@ -265,6 +282,7 @@ echo '{"samples":[...]}' | lucy build-lpd
 | [Quickstart](docs/tutorials/01-quickstart.md) | CLI · Go · npm · Python · Jupyter |
 | [Examples hub](examples/README.md) | runnable matrix + `./scripts/run-examples.sh` |
 | [Docs index](docs/README.md) | tutorials + HOST / PORTABLE / PUBLISH |
+| [Release](scripts/release.sh) | `./scripts/release.sh` · `--push` for GitHub tag + assets |
 
 ## License
 
