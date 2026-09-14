@@ -19,9 +19,17 @@ python/dist/
 python/build/
 *.pyc
 
-# Wasm / binaries (build artifacts)
-# build scratch (packages keep their own copies under js/wasm and python/.../bin)
+# Built binaries / wasm (ship via GitHub Releases + local build only)
 /artifacts/
+js/wasm/lucy.wasm
+js/wasm/wasm_exec.js
+js/wasm/wasm_exec_node.js
+python/src/lucy/bin/lucy
+python/src/lucy/bin/lucy-*
+python/src/lucy/bin/*.exe
+
+# Example outputs
+examples/out/
 
 # Editors / OS
 .DS_Store
@@ -31,4 +39,3 @@ python/build/
 .env
 .env.*
 !.env.example
-examples/out/

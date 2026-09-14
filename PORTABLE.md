@@ -23,7 +23,7 @@ Formulas live here. Floors are knobs, not copy-paste.
 ./go/scripts/build-artifacts.sh
 ```
 
-Ships into `artifacts/` + `js/wasm/` + `python/src/lucy/bin/`:
+Built into `artifacts/` + `js/wasm/` + `python/src/lucy/bin/` (**not** committed to git — only GitHub Release assets + local build):
 
 | Artifact | Use |
 |----------|-----|

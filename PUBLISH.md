@@ -38,6 +38,8 @@ Portable claim: [`PORTABLE.md`](PORTABLE.md)
 
 ## GitHub release (tag + notes + binaries)
 
+Binaries/wasm are **release assets only** — they are gitignored and not pushed with source.
+
 ```bash
 ./scripts/release.sh           # dry-run: checks, builds, example smoke, prints notes
 ./scripts/release.sh --push    # git tag vX.Y.Z + gh release + upload artifacts
