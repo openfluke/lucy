@@ -9,4 +9,6 @@ export {
   chartJPGNative,
   writeReportNative,
   writePDFNative,
+  writeCSVNative,
+  floorsNative,
 } from "./export.js";

@@ -22,6 +22,10 @@ func main() {
 	switch os.Args[1] {
 	case "version", "-version", "--version":
 		fmt.Println(lucy.Version)
+	case "floors":
+		enc := json.NewEncoder(os.Stdout)
+		enc.SetIndent("", "  ")
+		_ = enc.Encode(lucy.FloorsMap())
 	case "chart-radar", "chart-scatter", "chart-bars",
 		"chart-radar-png", "chart-scatter-png", "chart-bars-png",
 		"chart-radar-jpg", "chart-scatter-jpg", "chart-bars-jpg", "chart-pack":
@@ -102,6 +106,16 @@ func main() {
 			fail(err)
 		}
 		fmt.Println(os.Args[2])
+	case "csv":
+		raw, err := io.ReadAll(os.Stdin)
+		if err != nil {
+			fail(err)
+		}
+		resp, err := lucy.BuildFromJSON(raw)
+		if err != nil {
+			fail(err)
+		}
+		fmt.Print(lucy.BoardCSV(resp.Board))
 	case "report":
 		if len(os.Args) < 3 {
 			fail(fmt.Errorf("usage: lucy report <outdir> < request.json"))
@@ -155,10 +169,13 @@ func usage() {
 
 Usage:
   lucy version
+  lucy floors
   lucy build-lpd < request.json
   lucy chart-radar|chart-scatter|chart-bars < request.json
   lucy chart-*-png|chart-*-jpg < request.json
   lucy chart-pack < request.json
+  lucy csv < request.json
+  lucy pdf <out.pdf> < request.json
   lucy report <outdir> < request.json
   lucy serve [addr]                 # default :7474
 
@@ -172,4 +189,3 @@ func fail(err error) {
 	fmt.Fprintf(os.Stderr, "lucy: %v\n", err)
 	os.Exit(1)
 }
-

@@ -19,8 +19,15 @@ func TestBoardPDF(t *testing.T) {
 	if !bytes.HasPrefix(pdf, []byte("%PDF-1.4")) {
 		t.Fatalf("bad header %q", pdf[:min(16, len(pdf))])
 	}
-	if !bytes.Contains(pdf, []byte("%%%%EOF")) && !bytes.Contains(pdf, []byte("%%EOF")) {
+	if !bytes.Contains(pdf, []byte("%%EOF")) {
 		t.Fatal("missing EOF")
+	}
+	// cover + table are text streams
+	if !bytes.Contains(pdf, []byte("Lucy LPD board")) {
+		t.Fatal("missing cover title")
+	}
+	if !bytes.Contains(pdf, []byte("Top LPD ranking")) {
+		t.Fatal("missing table page")
 	}
 }
 

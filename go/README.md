@@ -1,10 +1,11 @@
 # go/ — Lucy measuring core
 
-**Version:** `0.6.0`
+**Version:** `0.7.0`
 
 ```go
-pdf, err := lucy.BoardPDF(board, 8)
-_ = lucy.WriteReportDir("out", board, 8)
+board := lucy.BuildLPD(samples)
+_ = lucy.BoardCSV(board)
+pdf, _ := lucy.BoardPDF(board, 8)
 ```
 
-CLI: `build-lpd` · `chart-*` · `chart-pack` · `report` · `pdf` · `serve`
+CLI: `build-lpd` · `floors` · `csv` · `chart-*` · `chart-pack` · `report` · `pdf` · `serve`

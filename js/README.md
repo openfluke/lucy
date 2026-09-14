@@ -1,8 +1,8 @@
 # `@openfluke/lucy`
 
-**Version:** `0.6.0`
+**Version:** `0.7.0`
 
-Measuring (wasm/native/serve) + boards + `writePDFNative` / `createLucyClient().pdf()`.
+Measuring + boards + `writeCSVNative` / `floorsNative` / PDF / serve client.
 
 ```bash
 cd js && npm test

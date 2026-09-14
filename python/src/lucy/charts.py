@@ -53,3 +53,15 @@ def write_report(samples, outdir: Union[str, Path], options=None, *, binary=None
 def write_pdf(samples, out_path, options=None, *, binary=None) -> str:
     out = _run(Path(binary) if binary else default_binary(), ["pdf", str(out_path)], samples, options)
     return out.decode().strip() or str(out_path)
+
+
+def board_csv(samples, options=None, *, binary=None) -> str:
+    return _run(Path(binary) if binary else default_binary(), ["csv"], samples, options).decode()
+
+
+def floors(*, binary=None) -> dict[str, Any]:
+    bin_path = Path(binary) if binary else default_binary()
+    proc = subprocess.run([str(bin_path), "floors"], capture_output=True, check=False)
+    if proc.returncode != 0:
+        raise RuntimeError(proc.stderr.decode() or f"lucy exited {proc.returncode}")
+    return json.loads(proc.stdout.decode())

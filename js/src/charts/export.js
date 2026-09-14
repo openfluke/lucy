@@ -139,3 +139,46 @@ export async function writePDFNative(samples, outPath, options) {
     child.stdin.end();
   });
 }
+
+export async function writeCSVNative(samples, outPath, options) {
+  const { spawn } = await import("node:child_process");
+  const { resolveLucyBinary } = await import("../native.js");
+  const { writeFile } = await import("node:fs/promises");
+  const bin = await resolveLucyBinary();
+  const req = JSON.stringify({ samples, options });
+  const csv = await new Promise((resolve, reject) => {
+    const child = spawn(bin, ["csv"], { stdio: ["pipe", "pipe", "pipe"] });
+    let stdout = "";
+    let stderr = "";
+    child.stdout.on("data", (d) => (stdout += d));
+    child.stderr.on("data", (d) => (stderr += d));
+    child.on("error", reject);
+    child.on("close", (code) => {
+      if (code !== 0) reject(new Error(stderr || `lucy exited ${code}`));
+      else resolve(stdout);
+    });
+    child.stdin.write(req);
+    child.stdin.end();
+  });
+  if (outPath) await writeFile(outPath, csv);
+  return csv;
+}
+
+export async function floorsNative() {
+  const { spawn } = await import("node:child_process");
+  const { resolveLucyBinary } = await import("../native.js");
+  const bin = await resolveLucyBinary();
+  const out = await new Promise((resolve, reject) => {
+    const child = spawn(bin, ["floors"], { stdio: ["ignore", "pipe", "pipe"] });
+    let stdout = "";
+    let stderr = "";
+    child.stdout.on("data", (d) => (stdout += d));
+    child.stderr.on("data", (d) => (stderr += d));
+    child.on("error", reject);
+    child.on("close", (code) => {
+      if (code !== 0) reject(new Error(stderr || `lucy exited ${code}`));
+      else resolve(stdout);
+    });
+  });
+  return JSON.parse(out);
+}

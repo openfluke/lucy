@@ -1,10 +1,11 @@
 # python/ — `openfluke-lucy`
 
-**Version:** `0.6.0`
+**Version:** `0.7.0`
 
 ```python
-from lucy import build_lpd, write_pdf, write_report, LucyClient
+from lucy import build_lpd, board_csv, floors, write_pdf, write_report
 
-write_pdf(samples, "board.pdf")
-write_report(samples, "./out")  # includes board.pdf
+floors()
+board_csv(samples)
+write_report(samples, "./out")  # includes board.pdf + board.csv
 ```

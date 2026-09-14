@@ -8,7 +8,7 @@ import (
 )
 
 // WriteReportDir writes an HTML + assets report for a board under dir.
-// Layout: index.html, board.json, *.svg, *.png, *.jpg
+// Layout: index.html, board.json, board.csv, board.pdf, *.svg, *.png, *.jpg
 func WriteReportDir(dir string, board LPD, max int) error {
 	if err := os.MkdirAll(dir, 0o755); err != nil {
 		return err
@@ -49,6 +49,9 @@ func WriteReportDir(dir string, board LPD, max int) error {
 	if err := write("board.json", bj); err != nil {
 		return err
 	}
+	if err := write("board.csv", []byte(BoardCSV(board))); err != nil {
+		return err
+	}
 	if pdf, err := BoardPDF(board, max); err == nil && len(pdf) > 0 {
 		_ = write("board.pdf", pdf)
 	}
@@ -61,7 +64,7 @@ h1,h2{font-weight:600} img,object{max-width:100%%;background:#0d1216;margin:.5re
 a{color:#3dd6c6}
 </style></head><body>
 <h1>Lucy board report <small style="color:#8aa0ad">%s</small></h1>
-<p><a href="board.json">board.json</a></p>
+<p><a href="board.json">board.json</a> · <a href="board.csv">board.csv</a> · <a href="board.pdf">board.pdf</a></p>
 <h2>Consciousness</h2><img src="consciousness.png" alt="consciousness"/>
 <h2>Memory density</h2><img src="density.png" alt="density"/>
 <h2>Q%% vs RAM</h2><img src="scatter.png" alt="scatter"/>

@@ -31,3 +31,23 @@ func (o DensityOptions) normalized() DensityOptions {
 	}
 	return o
 }
+
+// DefaultDensityOptions returns the published floor knobs (all filled).
+func DefaultDensityOptions() DensityOptions {
+	return DensityOptions{}.normalized()
+}
+
+// FloorsMap is the stable JSON shape for GET /api/floors and `lucy floors`.
+func FloorsMap() map[string]any {
+	o := DefaultDensityOptions()
+	return map[string]any{
+		"version":    Version,
+		"formula":    DensityFormula(),
+		"keep_floor": o.KeepFloor,
+		"gold_keep":  o.GoldKeep,
+		"lean_keep":  o.LeanKeep,
+		"gold_ram":   o.GoldRAM,
+		"near_ram":   o.NearRAM,
+		"shrink_cap": o.ShrinkCap,
+	}
+}

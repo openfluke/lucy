@@ -32,6 +32,21 @@ class LucyClient:
         with urllib.request.urlopen(req) as r:
             return r.read()
 
+    def floors(self) -> dict[str, Any]:
+        with urllib.request.urlopen(self.base_url + "/api/floors") as r:
+            return json.loads(r.read().decode())
+
+    def csv(self, samples: Sequence[Mapping[str, Any]], options: Optional[Mapping[str, float]] = None) -> str:
+        data = json.dumps({"samples": list(samples), **({"options": options} if options else {})}).encode()
+        req = urllib.request.Request(
+            self.base_url + "/api/csv",
+            data=data,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        with urllib.request.urlopen(req) as r:
+            return r.read().decode()
+
     def _post(self, path: str, body: dict[str, Any]) -> dict[str, Any]:
         data = json.dumps({k: v for k, v in body.items() if v is not None}).encode()
         req = urllib.request.Request(

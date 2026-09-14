@@ -31,7 +31,7 @@ func main() {
 	}
 	b, _ := json.MarshalIndent(out, "", "  ")
 	fmt.Println(string(b))
-	_ = os.WriteFile("../testdata/goldens_lpd_v0.6.json", b, 0644)
+	_ = os.WriteFile("../testdata/goldens_lpd_v0.7.json", b, 0644)
 }
 
 func ids(rs []lucy.LPDRow) []string {
