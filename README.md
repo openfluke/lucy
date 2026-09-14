@@ -20,18 +20,18 @@ the Go core version they claim.
 
 | Package | Channel | Version | Status | Notes |
 |---------|---------|---------|--------|-------|
-| **lucy** (monorepo) | git tag / [`VERSION`](VERSION) | `v0.3.0` | boards + charts | Tide-style UI helpers; SVG charts; host guide |
-| **Go core** `github.com/openfluke/lucy` | Go module | `v0.3.0` | usable | + `RadarSVG` / `ScatterSVG` / `BarsSVG` + `lucy chart-*` |
-| **`@openfluke/lucy`** | npm | `0.3.0` | ready (unpublished) | wasm + **native** + React/vanilla/`<lucy-board>` — [`js/`](js/) |
-| **`openfluke-lucy`** | PyPI | `0.3.0` | ready (unpublished) | + `board_records` / `to_dataframe` / `chart_svg` — [`python/`](python/) |
-| **testdata goldens** | in-repo | `0.3.0` | locked | [`testdata/goldens_lpd_v0.3.json`](testdata/goldens_lpd_v0.3.json) |
-| **charts / JPG** | in-repo | `0.3.0` | SVG live (JPG later) | Go SVG + JS canvas; see [`charts/`](charts/) |
+| **lucy** (monorepo) | git tag / [`VERSION`](VERSION) | `v0.4.0` | PNG packs + CI | SVG+PNG chart pack; `scripts/check-goldens.sh` |
+| **Go core** `github.com/openfluke/lucy` | Go module | `v0.4.0` | usable | + `RadarPNG` / `BuildBoardCharts` + `lucy chart-*-png` / `chart-pack` |
+| **`@openfluke/lucy`** | npm | `0.4.0` | ready (unpublished) | + `chartPNGNative` / `chartPackNative` + `<lucy-lpd-table>` |
+| **`openfluke-lucy`** | PyPI | `0.4.0` | ready (unpublished) | + `chart_png` / `chart_pack` |
+| **testdata goldens** | in-repo | `0.4.0` | locked | [`testdata/goldens_lpd_v0.4.json`](testdata/goldens_lpd_v0.4.json) |
+| **charts** | in-repo | `0.4.0` | SVG + PNG | JPG optional later; PDF-ready pack via `chart-pack` |
 
 **Scoreboard rules**
 
 1. Bump **monorepo** when the ruler or public board API changes.
 2. Bump **Go** first; npm / PyPI follow the same formulas (no silent drift).
-3. `0.0.x` = scaffold / unstable. `0.1.0` = first usable `BuildLPD` + goldens. `1.0.0` = wasm + at least one host import path documented.
+3. `0.0.x` = scaffold / unstable. `0.1.0` = first usable `BuildLPD` + goldens. `0.4.0` = PNG chart-pack + golden CI. `1.0.0` = portable claim + JPG/PDF parity.
 4. Keep this table honest when you cut a release (edit [`VERSION`](VERSION) + this table + `js/package.json` + `python/pyproject.toml` + Go tag).
 
 ### Deliverable map
@@ -57,7 +57,8 @@ Milestone meaning (all channels share the story; patch bumps `0.x.y` do not add 
 | **0.0** | Repo + stubs only |
 | **0.1** | Real `BuildLPD` + locked goldens; Go importable |
 | **0.2** | Host-facing boards API + npm/PyPI consuming Go artifacts |
-| **0.3** | Tide/Ocean/River-style charts usable from JS UI ← **current** |
+| **0.3** | Tide/Ocean/River-style charts usable from JS UI |
+| **0.4** | PNG export + PDF-ready chart pack + golden CI ← **current** |
 | **1.0** | Portable ruler: wasm + binaries documented; one real host path; formulas tunable without forks |
 
 ### Monorepo — what ships when
@@ -202,16 +203,16 @@ lucy/
 
 ## Relationship to Welvet / Tide
 
-**v0.3.0:** measuring math + Tide-style boards/charts live here.
+**v0.4.0:** measuring + Tide-style boards + **PNG / chart-pack**.
 
-- Go: `BuildLPD` / options / JSON + **SVG** (`RadarSVG`, `ScatterSVG`, `BarsSVG`)
-- CLI: `lucy build-lpd` · `lucy chart-radar|chart-scatter|chart-bars`
-- npm: wasm + native + React (`@openfluke/lucy/react`) + `<lucy-board>` CE
-- Python: `build_lpd`, `board_records` / `to_dataframe`, `chart_svg`
+- Go: SVG + PNG (`RadarPNG`, …) · `BuildBoardCharts` · `lucy chart-*-png` · `lucy chart-pack`
+- npm: `chartPNGNative` / `chartPackNative` · `<lucy-board>` + `<lucy-lpd-table>`
+- Python: `chart_svg` / `chart_png` / `chart_pack`
+- CI: [`scripts/check-goldens.sh`](scripts/check-goldens.sh)
 
 Host guide: [`HOST.md`](HOST.md). Rebuild: `./go/scripts/build-artifacts.sh`
 
-Goldens: [`testdata/goldens_lpd_v0.3.json`](testdata/goldens_lpd_v0.3.json).
+Goldens: [`testdata/goldens_lpd_v0.4.json`](testdata/goldens_lpd_v0.4.json).
 
 ---
 

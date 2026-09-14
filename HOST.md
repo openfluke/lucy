@@ -1,4 +1,4 @@
-# Host import guide (0.3)
+# Host import guide (0.4)
 
 Lucy does not train models. Feed finished cells → get a board (+ optional charts).
 
@@ -18,6 +18,8 @@ Tide dash/PDF can keep drawing; point measuring at this module when ready.
 ```bash
 lucy build-lpd < request.json
 lucy chart-radar < request.json > radar.svg
+lucy chart-radar-png < request.json > radar.png
+lucy chart-pack < request.json
 ```
 
 ## Node / Bun / React

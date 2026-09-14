@@ -1,34 +1,25 @@
 import { drawRadar, consciousnessSeries, densitySeries } from "../charts/radar.js";
 import { drawScatter, lpdScatterPoints } from "../charts/scatter.js";
 import { lpdTableHTML } from "../charts/table.js";
+import { registerLucyTableElement } from "./lucy-table.js";
 
 const Base =
   typeof HTMLElement !== "undefined"
     ? HTMLElement
-    : class {
-        /* Node stub — custom elements are browser-only */
-      };
+    : class {};
 
-/**
- * <lucy-board> — set .board = LPD board object (from buildLPD).
- * Works in Angular via CUSTOM_ELEMENTS_SCHEMA.
- */
 export class LucyBoardElement extends Base {
   #board = null;
-
   set board(v) {
     this.#board = v;
     this.render();
   }
-
   get board() {
     return this.#board;
   }
-
   connectedCallback() {
     this.render();
   }
-
   render() {
     if (typeof document === "undefined") return;
     this.innerHTML = "";
@@ -66,4 +57,7 @@ export function registerLucyElements() {
   if (!customElements.get("lucy-board")) {
     customElements.define("lucy-board", LucyBoardElement);
   }
+  registerLucyTableElement();
 }
+
+export { LucyLPDTableElement, registerLucyTableElement } from "./lucy-table.js";

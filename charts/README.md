@@ -1,10 +1,11 @@
 # charts/
 
-**0.3.0:** SVG generation lives in Go (`lucy.RadarSVG` / `ScatterSVG` / `BarsSVG`)
-and JS canvas helpers (`@openfluke/lucy/charts`). CLI:
+**0.4.0:** SVG + PNG from Go; JS canvas + native PNG; Python wrappers.
 
 ```bash
-lucy chart-radar < request.json > radar.svg
+lucy chart-radar < req.json > radar.svg
+lucy chart-radar-png < req.json > radar.png
+lucy chart-pack < req.json          # svg + png_b64 JSON pack (PDF-ready)
 ```
 
-**JPG / PDF parity** with Tide/River full report set → targeted for **1.0**.
+True **JPG** encode and full Tide/River PDF chart parity → **1.0**.

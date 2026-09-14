@@ -1,15 +1,15 @@
 # `@openfluke/lucy`
 
-**Version:** `0.3.0`
+**Version:** `0.4.0`
 
 | Import | What |
 |--------|------|
-| `@openfluke/lucy` | `buildLPD` (wasm), `buildLPDNative`, chart helpers |
-| `@openfluke/lucy/react` | `LucyBoard`, radars, table (peer `react`) |
-| `@openfluke/lucy/charts` | vanilla canvas/HTML helpers |
-| `@openfluke/lucy/elements` | `<lucy-board>` custom element (Angular-friendly) |
+| `@openfluke/lucy` | `buildLPD`, `buildLPDNative`, charts, `chartPNGNative`, `chartPackNative` |
+| `@openfluke/lucy/react` | `LucyBoard` (peer `react`) |
+| `@openfluke/lucy/charts` | canvas helpers + PNG export |
+| `@openfluke/lucy/elements` | `<lucy-board>`, `<lucy-lpd-table>` |
 
 ```bash
 cd js && npm test
-node examples/byo-poll.mjs ../testdata/goldens_lpd_v0.3.json
+../scripts/check-goldens.sh
 ```

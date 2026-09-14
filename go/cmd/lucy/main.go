@@ -5,6 +5,7 @@
 package main
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -21,7 +22,8 @@ func main() {
 	switch os.Args[1] {
 	case "version", "-version", "--version":
 		fmt.Println(lucy.Version)
-	case "chart-radar", "chart-scatter", "chart-bars":
+	case "chart-radar", "chart-scatter", "chart-bars",
+		"chart-radar-png", "chart-scatter-png", "chart-bars-png", "chart-pack":
 		raw, err := io.ReadAll(os.Stdin)
 		if err != nil {
 			fail(err)
@@ -30,16 +32,47 @@ func main() {
 		if err != nil {
 			fail(err)
 		}
-		var svg string
 		switch os.Args[1] {
 		case "chart-radar":
-			svg = lucy.RadarSVG("Consciousness radar", lucy.ConsciousnessSeries(resp.Board, 8))
+			fmt.Print(lucy.RadarSVG("Consciousness radar", lucy.ConsciousnessSeries(resp.Board, 8)))
 		case "chart-scatter":
-			svg = lucy.ScatterSVG("Q% vs RAM", "RAM KiB", "Q %", lucy.LPDScatterPoints(resp.Board))
+			fmt.Print(lucy.ScatterSVG("Q% vs RAM", "RAM KiB", "Q %", lucy.LPDScatterPoints(resp.Board)))
 		case "chart-bars":
-			svg = lucy.BarsSVG("Top LPD", resp.Board, 12)
+			fmt.Print(lucy.BarsSVG("Top LPD", resp.Board, 12))
+		case "chart-radar-png":
+			b, err := lucy.RadarPNG("Consciousness radar", lucy.ConsciousnessSeries(resp.Board, 8))
+			if err != nil {
+				fail(err)
+			}
+			os.Stdout.Write(b)
+		case "chart-scatter-png":
+			b, err := lucy.ScatterPNG("Q% vs RAM", "RAM KiB", "Q %", lucy.LPDScatterPoints(resp.Board))
+			if err != nil {
+				fail(err)
+			}
+			os.Stdout.Write(b)
+		case "chart-bars-png":
+			b, err := lucy.BarsPNG("Top LPD", resp.Board, 12)
+			if err != nil {
+				fail(err)
+			}
+			os.Stdout.Write(b)
+		case "chart-pack":
+			pack := lucy.BuildBoardCharts(resp.Board, 8)
+			enc := json.NewEncoder(os.Stdout)
+			enc.SetIndent("", "  ")
+			_ = enc.Encode(map[string]any{
+				"version":            lucy.Version,
+				"consciousness_svg":  pack.ConsciousnessSVG,
+				"density_svg":        pack.DensitySVG,
+				"scatter_svg":        pack.ScatterSVG,
+				"bars_svg":           pack.BarsSVG,
+				"consciousness_png_b64": encodeB64(pack.ConsciousnessPNG),
+				"density_png_b64":       encodeB64(pack.DensityPNG),
+				"scatter_png_b64":       encodeB64(pack.ScatterPNG),
+				"bars_png_b64":          encodeB64(pack.BarsPNG),
+			})
 		}
-		fmt.Print(svg)
 	case "build-lpd", "lpd":
 		raw, err := io.ReadAll(os.Stdin)
 		if err != nil {
@@ -69,7 +102,9 @@ func usage() {
 Usage:
   lucy version
   lucy build-lpd < request.json   # stdin BuildRequest → stdout BuildResponse
-  lucy chart-radar|chart-scatter|chart-bars < request.json  # SVG on stdout
+  lucy chart-radar|chart-scatter|chart-bars < request.json       # SVG
+  lucy chart-radar-png|chart-scatter-png|chart-bars-png < req.json # PNG
+  lucy chart-pack < request.json  # JSON with svg + png_b64 fields
 
 BuildRequest:
   {"samples":[{"id":"...","acc":90,"thru":200,"avail":40,"score":100,"ram_kib":1000}],
@@ -80,4 +115,11 @@ BuildRequest:
 func fail(err error) {
 	fmt.Fprintf(os.Stderr, "lucy: %v\n", err)
 	os.Exit(1)
+}
+
+func encodeB64(b []byte) string {
+	if len(b) == 0 {
+		return ""
+	}
+	return base64.StdEncoding.EncodeToString(b)
 }

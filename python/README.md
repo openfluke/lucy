@@ -1,12 +1,11 @@
 # python/ — `openfluke-lucy`
 
-**Version:** `0.3.0`
+**Version:** `0.4.0`
 
 ```python
-from lucy import build_lpd, board_records, chart_svg, to_dataframe
+from lucy import build_lpd, chart_svg, chart_png, chart_pack
 
-resp = build_lpd(samples, options={"keep_floor": 0.7})
-rows = board_records(resp)       # list[dict] for notebooks
-svg = chart_svg(samples, "radar")  # Go SVG
-# df = to_dataframe(resp)        # needs pandas
+resp = build_lpd(samples)
+open("radar.png", "wb").write(chart_png(samples, "radar"))
+pack = chart_pack(samples)  # svg + png_b64
 ```

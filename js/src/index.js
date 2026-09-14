@@ -1,6 +1,6 @@
 import { ensureWasm } from "./loadWasm.js";
 
-export const VERSION = "0.3.0";
+export const VERSION = "0.4.0";
 export const KEEP_FLOOR = 0.7;
 export const GOLD_KEEP = 0.8;
 export const LEAN_KEEP = 0.95;
@@ -10,7 +10,7 @@ export const SHRINK_CAP = 32;
 
 export * from "./charts/index.js";
 export { buildLPDNative, resolveLucyBinary } from "./native.js";
-export { registerLucyElements, LucyBoardElement } from "./elements/lucy-board.js";
+export { registerLucyElements, LucyBoardElement, LucyLPDTableElement, registerLucyTableElement } from "./elements/lucy-board.js";
 
 function wireSample(s) {
   return {

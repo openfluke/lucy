@@ -1,17 +1,10 @@
 # go/ — Lucy measuring core
 
-**Version:** `0.3.0`
-
-Measuring + SVG boards (Tide-style). JPG export still later.
-
-```bash
-cd go && go test ./lucy/
-../go/scripts/build-artifacts.sh
-```
+**Version:** `0.4.0`
 
 ```go
-board := lucy.BuildLPD(samples)
-svg := lucy.RadarSVG("Consciousness", lucy.ConsciousnessSeries(board, 8))
+pack := lucy.BuildBoardCharts(board, 8)
+_ = pack.ConsciousnessPNG // []byte PNG
 ```
 
-CLI: `lucy build-lpd` · `lucy chart-radar|chart-scatter|chart-bars`
+CLI: `build-lpd` · `chart-radar[-png]` · `chart-scatter[-png]` · `chart-bars[-png]` · `chart-pack`
