@@ -25,13 +25,13 @@ from lucy import (
 class TestBuildLPD(unittest.TestCase):
     def setUp(self):
         root = Path(__file__).resolve().parents[2]
-        self.g = json.loads((root / "testdata" / "goldens_lpd_v0.8.json").read_text())
+        self.g = json.loads((root / "testdata" / "goldens_lpd_v0.9.json").read_text())
 
     def test_build_lpd_matches_golden(self):
-        self.assertEqual(__version__, "0.8.0")
-        self.assertEqual(version(), "0.8.0")
+        self.assertEqual(__version__, "0.9.0")
+        self.assertEqual(version(), "0.9.0")
         resp = build_lpd(self.g["samples"])
-        self.assertEqual(resp["version"], "0.8.0")
+        self.assertEqual(resp["version"], "0.9.0")
         self.assertEqual(resp["board"]["top"][0]["id"], self.g["expect"]["top"][0]["id"])
 
     def test_charts_report_pdf(self):
@@ -41,7 +41,7 @@ class TestBuildLPD(unittest.TestCase):
         self.assertEqual(chart_jpg(self.g["samples"], "radar")[0], 0xFF)
         pack = chart_pack(self.g["samples"])
         self.assertIn("bars_jpg_b64", pack)
-        self.assertEqual(floors()["version"], "0.8.0")
+        self.assertEqual(floors()["version"], "0.9.0")
         csv = board_csv(self.g["samples"])
         self.assertTrue(csv.startswith("id,band,lpd,"))
         with tempfile.TemporaryDirectory() as d:

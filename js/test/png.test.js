@@ -8,7 +8,7 @@ import { chartPNGNative, chartPackNative } from "../src/index.js";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 
 test("native PNG + chart-pack", async () => {
-  const g = JSON.parse(await readFile(path.join(root, "testdata/goldens_lpd_v0.8.json"), "utf8"));
+  const g = JSON.parse(await readFile(path.join(root, "testdata/goldens_lpd_v0.9.json"), "utf8"));
   const png = await chartPNGNative(g.samples, "radar");
   assert.ok(Buffer.isBuffer(png) || png instanceof Uint8Array);
   assert.equal(png[0], 0x89);

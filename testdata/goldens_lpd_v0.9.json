@@ -1,0 +1,105 @@
+{
+  "expect": {
+    "acc_champ_id": "f32",
+    "champ_id": "f32",
+    "gold_std_id": "int8",
+    "top": [
+      {
+        "band": "gold",
+        "id": "int8",
+        "lpd": 5.111793649660395,
+        "q": 0.9201228569388712,
+        "ram_kib": 180,
+        "rel_acc": 0.9111111111111111,
+        "shrink": 5.555555555555555
+      },
+      {
+        "band": "keep",
+        "id": "f32",
+        "lpd": 1,
+        "q": 1,
+        "ram_kib": 1000,
+        "rel_acc": 1,
+        "shrink": 1
+      },
+      {
+        "band": "keep",
+        "id": "fat",
+        "lpd": 0.3110780388124553,
+        "q": 0.933234116437366,
+        "ram_kib": 3000,
+        "rel_acc": 0.9777777777777777,
+        "shrink": 0.3333333333333333
+      },
+      {
+        "band": "trap",
+        "id": "bin",
+        "lpd": 0,
+        "q": 0.5108729549290354,
+        "ram_kib": 40,
+        "rel_acc": 0.13333333333333333,
+        "shrink": 25
+      }
+    ],
+    "trap_ids": [
+      "bin"
+    ]
+  },
+  "formula": "Synthetic organism / Lucy density: run+train in a small box. Hard Acc = argmax accuracy. Acc keep % = this Acc / Acc-champ Acc (1.0 = matches the best Acc). SoftAcc = serve-confidence (not Score). Score = Thru x Avail x HardAcc / 10,000. Q = geomean Acc-keep/Thru-keep/Avail-keep vs learner peaks. LPD = Q x shrink vs Acc-champ RAM; 0 unless Acc keep \u003e=70%. Gold = all 3 pillars \u003e=80% at \u003c=20% Acc-champ RAM. Gold-std = Acc keep \u003e=80% plus Thru or Avail, then smallest then fastest. Lean = Acc keep \u003e=95% of Acc champ, then smallest RAM / fastest Thru / best Avail — sacrifice peak Acc only within that band.",
+  "keep_floor": 0.7,
+  "samples": [
+    {
+      "id": "f32",
+      "mode": "sgd",
+      "dtype": "float32",
+      "format": "",
+      "arch": "single",
+      "score": 100,
+      "soft_acc": 80,
+      "avg_accuracy": 90,
+      "throughput": 200,
+      "availability": 40,
+      "ram_kib": 1000
+    },
+    {
+      "id": "int8",
+      "mode": "sgd",
+      "dtype": "int8",
+      "format": "",
+      "arch": "single",
+      "score": 85,
+      "soft_acc": 72,
+      "avg_accuracy": 82,
+      "throughput": 180,
+      "availability": 38,
+      "ram_kib": 180
+    },
+    {
+      "id": "bin",
+      "mode": "sgd",
+      "dtype": "binary",
+      "format": "",
+      "arch": "single",
+      "score": 40,
+      "soft_acc": 20,
+      "avg_accuracy": 12,
+      "throughput": 400,
+      "availability": 50,
+      "ram_kib": 40
+    },
+    {
+      "id": "fat",
+      "mode": "tween",
+      "dtype": "float32",
+      "format": "",
+      "arch": "tricameral",
+      "score": 95,
+      "soft_acc": 78,
+      "avg_accuracy": 88,
+      "throughput": 190,
+      "availability": 35,
+      "ram_kib": 3000
+    }
+  ],
+  "version": "0.9.0"
+}

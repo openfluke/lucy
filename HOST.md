@@ -1,26 +1,19 @@
-# Host import guide (0.8)
+# Host import guide (0.9)
 
-Lucy does not train models. Feed finished cells → board (+ charts / HTML / PDF / CSV / HTTP).
-
-## Go (Tide path)
+## Go
 
 ```go
 import "github.com/openfluke/lucy/lucy"
 
 board := lucy.BuildLPD(samples)
+pdf, _ := lucy.SitePDF(board, 8) // near · LPD · thru · bands · charts
 ```
 
-Dev replace in host `go.mod`:
+## CLI / HTTP
 
+```bash
+lucy site-pdf ./site.pdf < request.json
+lucy serve :7474   # POST /api/site-pdf · /api/pdf
 ```
-require github.com/openfluke/lucy v0.8.0
-replace github.com/openfluke/lucy => ../lucy/go
-```
-
-See [`MIGRATE.md`](MIGRATE.md) · [`PUBLISH.md`](PUBLISH.md).
-
-## CLI / serve / npm / Python
-
-Same as 0.7 (`floors`, `csv`, `pdf`, `report`, `serve`) plus Angular CE `board-json` attrs.
 
 Rebuild: `./go/scripts/build-artifacts.sh`

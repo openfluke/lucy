@@ -15,7 +15,7 @@ func TestGoldensLPDV01(t *testing.T) {
 	if !ok {
 		t.Fatal("caller")
 	}
-	path := filepath.Join(filepath.Dir(file), "..", "..", "testdata", "goldens_lpd_v0.8.json")
+	path := filepath.Join(filepath.Dir(file), "..", "..", "testdata", "goldens_lpd_v0.9.json")
 	raw, err := os.ReadFile(path)
 	if err != nil {
 		t.Fatal(err)

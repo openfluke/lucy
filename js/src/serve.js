@@ -35,6 +35,15 @@ export function createLucyClient(baseURL = "http://127.0.0.1:7474") {
       if (!r.ok) throw new Error(await r.text());
       return Buffer.from(await r.arrayBuffer());
     },
+    async sitePDF(samples, options) {
+      const r = await fetch(`${root}/api/site-pdf`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ samples, options }),
+      });
+      if (!r.ok) throw new Error(await r.text());
+      return Buffer.from(await r.arrayBuffer());
+    },
     async floors() {
       const r = await fetch(`${root}/api/floors`);
       if (!r.ok) throw new Error(`floors ${r.status}`);

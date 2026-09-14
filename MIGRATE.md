@@ -25,7 +25,10 @@ board := lucy.BuildLPDWithOptions(samples, lucy.DensityOptions{KeepFloor: 0.75})
 
 See [`PUBLISH.md`](PUBLISH.md) and [`examples/`](examples/).
 
-## What 0.9 / 1.0 still own
+## What 1.0 still owns
+
+- Portable claim + published channels as default
+- Optional Tide compare mode×dtype PDF grids inside Lucy
 
 - **0.9** Tide/River full-site PDF parity
 - **1.0** portable claim + published channels as the default story

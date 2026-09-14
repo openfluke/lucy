@@ -1,6 +1,6 @@
 # go/ — Lucy measuring core
 
-**Version:** `0.8.0`
+**Version:** `0.9.0`
 
 ```go
 import "github.com/openfluke/lucy/lucy"

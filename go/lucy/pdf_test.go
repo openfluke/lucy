@@ -11,8 +11,9 @@ func TestBoardPDF(t *testing.T) {
 	board := lucy.BuildLPD([]lucy.Sample{
 		{ID: "f32", Acc: 90, Thru: 200, Avail: 40, Score: 100, RAMKiB: 1000},
 		{ID: "int8", Acc: 82, Thru: 180, Avail: 38, Score: 85, RAMKiB: 180},
+		{ID: "bin", Acc: 12, Thru: 400, Avail: 50, Score: 40, RAMKiB: 40},
 	})
-	pdf, err := lucy.BoardPDF(board, 8)
+	pdf, err := lucy.SitePDF(board, 8)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -22,12 +23,21 @@ func TestBoardPDF(t *testing.T) {
 	if !bytes.Contains(pdf, []byte("%%EOF")) {
 		t.Fatal("missing EOF")
 	}
-	// cover + table are text streams
-	if !bytes.Contains(pdf, []byte("Lucy LPD board")) {
-		t.Fatal("missing cover title")
+	for _, want := range []string{
+		"Lucy LPD board",
+		"Top LPD ranking",
+		"Acc keep band",
+		"Throughput ranking",
+		"Gold / lean / trap bands",
+	} {
+		if !bytes.Contains(pdf, []byte(want)) {
+			t.Fatalf("missing %q", want)
+		}
 	}
-	if !bytes.Contains(pdf, []byte("Top LPD ranking")) {
-		t.Fatal("missing table page")
+	// BoardPDF aliases SitePDF
+	pdf2, err := lucy.BoardPDF(board, 8)
+	if err != nil || len(pdf2) < 100 {
+		t.Fatal(err, len(pdf2))
 	}
 }
 

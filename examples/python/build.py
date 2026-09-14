@@ -8,7 +8,7 @@ sys.path.insert(0, str(ROOT / "python" / "src"))
 
 from lucy import board_csv, build_lpd, floors, write_pdf
 
-g = json.loads((ROOT / "testdata" / "goldens_lpd_v0.8.json").read_text())
+g = json.loads((ROOT / "testdata" / "goldens_lpd_v0.9.json").read_text())
 print("floors", floors())
 resp = build_lpd(g["samples"])
 print("top", resp["board"]["top"][0]["id"], resp["board"]["top"][0]["lpd"])

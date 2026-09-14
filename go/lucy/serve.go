@@ -13,7 +13,8 @@ import (
 //	GET  /api/floors
 //	POST /api/lpd          BuildRequest → BuildResponse
 //	POST /api/chart-pack   BuildRequest → chart-pack JSON (svg + png/jpg b64)
-//	POST /api/pdf          BuildRequest → application/pdf
+//	POST /api/pdf          BuildRequest → application/pdf (River-parity site pack)
+//	POST /api/site-pdf     same as /api/pdf
 //	POST /api/csv          BuildRequest → text/csv
 func Handler() http.Handler {
 	mux := http.NewServeMux()
@@ -43,7 +44,7 @@ func Handler() http.Handler {
 		w.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(w).Encode(resp)
 	})
-	mux.HandleFunc("/api/pdf", func(w http.ResponseWriter, r *http.Request) {
+	sitePDF := func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
 			http.Error(w, "POST only", http.StatusMethodNotAllowed)
 			return
@@ -58,15 +59,17 @@ func Handler() http.Handler {
 			http.Error(w, err.Error(), 400)
 			return
 		}
-		pdf, err := BoardPDF(resp.Board, 8)
+		pdf, err := SitePDF(resp.Board, 8)
 		if err != nil {
 			http.Error(w, err.Error(), 500)
 			return
 		}
 		w.Header().Set("Content-Type", "application/pdf")
-		w.Header().Set("Content-Disposition", "attachment; filename=lucy-board.pdf")
+		w.Header().Set("Content-Disposition", "attachment; filename=lucy-site.pdf")
 		_, _ = w.Write(pdf)
-	})
+	}
+	mux.HandleFunc("/api/pdf", sitePDF)
+	mux.HandleFunc("/api/site-pdf", sitePDF)
 	mux.HandleFunc("/api/csv", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
 			http.Error(w, "POST only", http.StatusMethodNotAllowed)
@@ -111,7 +114,7 @@ func Handler() http.Handler {
 			return
 		}
 		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-		_, _ = io.WriteString(w, "lucy serve "+Version+"\nGET /api/version\nGET /api/floors\nPOST /api/lpd\nPOST /api/chart-pack\nPOST /api/pdf\nPOST /api/csv\n")
+		_, _ = io.WriteString(w, "lucy serve "+Version+"\nGET /api/version\nGET /api/floors\nPOST /api/lpd\nPOST /api/chart-pack\nPOST /api/pdf\nPOST /api/site-pdf\nPOST /api/csv\n")
 	})
 	return mux
 }

@@ -86,7 +86,7 @@ func main() {
 			enc.SetIndent("", "  ")
 			_ = enc.Encode(lucy.ChartPackJSON(pack))
 		}
-	case "pdf":
+	case "pdf", "site-pdf":
 		if len(os.Args) < 3 {
 			fail(fmt.Errorf("usage: lucy pdf <out.pdf> < request.json"))
 		}
@@ -175,7 +175,7 @@ Usage:
   lucy chart-*-png|chart-*-jpg < request.json
   lucy chart-pack < request.json
   lucy csv < request.json
-  lucy pdf <out.pdf> < request.json
+  lucy pdf|site-pdf <out.pdf> < request.json   # River-parity site pack
   lucy report <outdir> < request.json
   lucy serve [addr]                 # default :7474
 

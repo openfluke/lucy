@@ -182,3 +182,8 @@ export async function floorsNative() {
   });
   return JSON.parse(out);
 }
+
+/** River-parity site pack (alias of writePDFNative since 0.9). */
+export async function writeSitePDFNative(samples, outPath, options) {
+  return writePDFNative(samples, outPath, options);
+}

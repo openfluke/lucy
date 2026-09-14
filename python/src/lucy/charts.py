@@ -65,3 +65,8 @@ def floors(*, binary=None) -> dict[str, Any]:
     if proc.returncode != 0:
         raise RuntimeError(proc.stderr.decode() or f"lucy exited {proc.returncode}")
     return json.loads(proc.stdout.decode())
+
+
+def write_site_pdf(samples, out_path, options=None, *, binary=None) -> str:
+    """River-parity site pack (same as write_pdf since 0.9)."""
+    return write_pdf(samples, out_path, options, binary=binary)

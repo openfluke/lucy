@@ -20,12 +20,12 @@ the Go core version they claim.
 
 | Package | Channel | Version | Status | Notes |
 |---------|---------|---------|--------|-------|
-| **lucy** (monorepo) | git tag / [`VERSION`](VERSION) | `v0.8.0` | publish + Tide | Tide imports `github.com/openfluke/lucy/lucy`; publish checklist |
-| **Go core** `github.com/openfluke/lucy` | Go module | `v0.8.0` | usable | host path live in Tide (`replace` / tag) |
-| **`@openfluke/lucy`** | npm | `0.8.0` | publish-ready | Angular CE `board-json` attrs · [`PUBLISH.md`](PUBLISH.md) |
-| **`openfluke-lucy`** | PyPI | `0.8.0` | publish-ready | same version lock · [`PUBLISH.md`](PUBLISH.md) |
-| **testdata goldens** | in-repo | `0.8.0` | locked | [`testdata/goldens_lpd_v0.8.json`](testdata/goldens_lpd_v0.8.json) |
-| **charts** | in-repo | `0.8.0` | SVG/PNG/JPG/PDF+CSV | Tide/River full-site PDF parity → 0.9 / 1.0 |
+| **lucy** (monorepo) | git tag / [`VERSION`](VERSION) | `v0.9.0` | River PDF parity | `SitePDF` near/LPD/thru/bands + charts |
+| **Go core** `github.com/openfluke/lucy` | Go module | `v0.9.0` | usable | `SitePDF` · `lucy site-pdf` · `/api/site-pdf` |
+| **`@openfluke/lucy`** | npm | `0.9.0` | publish-ready | `writeSitePDFNative` · client `.sitePDF()` |
+| **`openfluke-lucy`** | PyPI | `0.9.0` | publish-ready | `write_site_pdf` · `LucyClient.site_pdf()` |
+| **testdata goldens** | in-repo | `0.9.0` | locked | [`testdata/goldens_lpd_v0.9.json`](testdata/goldens_lpd_v0.9.json) |
+| **charts** | in-repo | `0.9.0` | site PDF pack | compare mode×dtype grids still host-side → 1.0 |
 
 **Scoreboard rules**
 
@@ -51,7 +51,7 @@ the Go core version they claim.
 
 Legend: **—** not in that cut · **○** scaffold / stub · **◐** partial · **●** done for that version · **◇** planned.
 
-All channels share one story. **Current = 0.8.** Next planned cuts: **0.9 → 1.0**.
+All channels share one story. **Current = 0.9.** Next planned cut: **1.0**.
 
 ### Release line (all versions)
 
@@ -65,8 +65,8 @@ All channels share one story. **Current = 0.8.** Next planned cuts: **0.9 → 1.
 | **0.5** | shipped | JPG + HTML report + `lucy serve` HTTP API |
 | **0.6** | shipped | Multi-page PDF board report (chart pages) |
 | **0.7** | shipped | Host cutover kit: cover+table PDF · CSV · floors · examples / MIGRATE |
-| **0.8** | **current** | Publish channels + Tide import switch (`github.com/openfluke/lucy/lucy`) |
-| **0.9** | planned | Tide/River PDF parity (compare / near / LPD / thru packs) |
+| **0.8** | shipped | Publish channels + Tide import switch (`github.com/openfluke/lucy/lucy`) |
+| **0.9** | **current** | Tide/River PDF parity (near / LPD / thru / bands + charts) |
 | **1.0** | planned | Portable claim: wasm+binaries documented; no host owns a fork; floors tunable without forks |
 
 ### Version ↔ channel matrix (what each cut bumped)
@@ -80,8 +80,8 @@ All channels share one story. **Current = 0.8.** Next planned cuts: **0.9 → 1.
 | 0.5 | `0.5.0` | `0.5.0` | `0.5.0` | `0.5.0` | `v0.5` |
 | 0.6 | `0.6.0` | `0.6.0` | `0.6.0` | `0.6.0` | `v0.6` |
 | 0.7 | `0.7.0` | `0.7.0` | `0.7.0` | `0.7.0` | [`v0.7`](testdata/goldens_lpd_v0.7.json) |
-| **0.8** | **`0.8.0`** | **`0.8.0`** | **`0.8.0`** publish-ready | **`0.8.0`** publish-ready | **[`v0.8`](testdata/goldens_lpd_v0.8.json)** |
-| 0.9 | `0.9.0` ◇ | `0.9.0` ◇ | `0.9.0` ◇ | `0.9.0` ◇ | `v0.9` ◇ |
+| 0.8 | `0.8.0` | `0.8.0` | `0.8.0` publish-ready | `0.8.0` publish-ready | [`v0.8`](testdata/goldens_lpd_v0.8.json) |
+| **0.9** | **`0.9.0`** | **`0.9.0`** | **`0.9.0`** | **`0.9.0`** | **[`v0.9`](testdata/goldens_lpd_v0.9.json)** |
 | 1.0 | `1.0.0` ◇ | `1.0.0` ◇ | `1.0.0` ◇ | `1.0.0` ◇ | `v1.0` ◇ |
 
 ### Monorepo — what ships when
@@ -107,7 +107,7 @@ All channels share one story. **Current = 0.8.** Next planned cuts: **0.9 → 1.
 | PDF chart pages | ● | ● | ● | ● | ● |
 | PDF cover + LPD table · CSV · floors API | — | ● | ● | ● | ● |
 | Go module tagged / discoverable for hosts | ◐ | ◐ | ● | ● | ● |
-| River-style compare / near / thru PDF sections | — | — | — | ● | ● |
+| River-style near / LPD / thru / bands PDF | — | — | — | ● | ● |
 | Documented Tide replace path (live in Tide) | ◐ | ◐ | ● | ● | ● |
 
 ### npm `@openfluke/lucy` ([`js/`](js/))
@@ -119,7 +119,7 @@ All channels share one story. **Current = 0.8.** Next planned cuts: **0.9 → 1.
 | CSV + floors helpers | — | ● | ● | ● | ● |
 | **Published** to npm | — | — | ◐ ready | ● | ● |
 | Angular CE polish | ◐ | ◐ | ● | ● | ● |
-| Tide/River PDF client parity | — | ◐ | ◐ | ● | ● |
+| Tide/River site PDF client | — | ◐ | ◐ | ● | ● |
 | Tunable floors documented end-to-end | ◐ | ● | ● | ● | ● |
 
 ### PyPI `openfluke-lucy` ([`python/`](python/))
@@ -130,7 +130,7 @@ All channels share one story. **Current = 0.8.** Next planned cuts: **0.9 → 1.
 | CSV · floors · DataFrame helpers | ◐ | ● | ● | ● | ● |
 | **Published** to PyPI | — | — | ◐ ready | ● | ● |
 | Notebook examples | ◐ | ◐ | ● | ● | ● |
-| Tide/River PDF helpers | — | ◐ | ◐ | ● | ● |
+| Tide/River site PDF helpers | — | ◐ | ◐ | ● | ● |
 
 ### testdata + charts
 
@@ -139,7 +139,7 @@ All channels share one story. **Current = 0.8.** Next planned cuts: **0.9 → 1.
 | Locked LPD goldens (Score / Q / LPD / bands) | ● | ● | ● | ● | ● |
 | SVG / PNG / JPG / board PDF | ● | ● | ● | ● | ● |
 | Cover + table PDF · board.csv in reports | — | ● | ● | ● | ● |
-| Tide/River PDF-friendly chart set | — | ◐ | ◐ | ● | ● |
+| Tide/River site PDF (near/LPD/thru/bands) | — | ◐ | ◐ | ● | ● |
 | v1 golden freeze | — | — | — | ◐ | ● |
 
 Update these tables when a cut ships — same honesty rule as the version scoreboard.
@@ -213,17 +213,18 @@ lucy/
 
 ## Relationship to Welvet / Tide
 
-**v0.8.0:** measuring + boards + **publish + Tide import switch**.
+**v0.9.0:** measuring + boards + **River PDF parity**.
 
-- Go: Tide hosts import `github.com/openfluke/lucy/lucy` (see Tide `go.mod` replace)
-- npm: Angular CE `board-json` · publish checklist [`PUBLISH.md`](PUBLISH.md)
-- Python: publish-ready · same version lock
-- Host path: [`MIGRATE.md`](MIGRATE.md) · [`examples/`](examples/) · [`HOST.md`](HOST.md)
-- CI: [`scripts/check-goldens.sh`](scripts/check-goldens.sh) · [`scripts/publish-check.sh`](scripts/publish-check.sh)
+- Go: `SitePDF` (cover · Acc-keep · LPD · thru · bands · charts) · `lucy site-pdf` · `/api/site-pdf`
+- npm: `writeSitePDFNative` · `createLucyClient().sitePDF()`
+- Python: `write_site_pdf` · `LucyClient.site_pdf()`
+- Note: compare mode×dtype grids remain Tide/River host-side (→ 1.0 polish)
+- Host path: [`MIGRATE.md`](MIGRATE.md) · [`HOST.md`](HOST.md) · [`PUBLISH.md`](PUBLISH.md)
+- CI: [`scripts/check-goldens.sh`](scripts/check-goldens.sh)
 
 Rebuild: `./go/scripts/build-artifacts.sh`
 
-Goldens: [`testdata/goldens_lpd_v0.8.json`](testdata/goldens_lpd_v0.8.json).
+Goldens: [`testdata/goldens_lpd_v0.9.json`](testdata/goldens_lpd_v0.9.json).
 
 ---
 

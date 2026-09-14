@@ -32,6 +32,17 @@ class LucyClient:
         with urllib.request.urlopen(req) as r:
             return r.read()
 
+    def site_pdf(self, samples: Sequence[Mapping[str, Any]], options: Optional[Mapping[str, float]] = None) -> bytes:
+        data = json.dumps({"samples": list(samples), **({"options": options} if options else {})}).encode()
+        req = urllib.request.Request(
+            self.base_url + "/api/site-pdf",
+            data=data,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        with urllib.request.urlopen(req) as r:
+            return r.read()
+
     def floors(self) -> dict[str, Any]:
         with urllib.request.urlopen(self.base_url + "/api/floors") as r:
             return json.loads(r.read().decode())

@@ -2,7 +2,8 @@
 
 | File | Version |
 |------|---------|
-| [`goldens_lpd_v0.8.json`](goldens_lpd_v0.8.json) | 0.8.0 (current) |
+| [`goldens_lpd_v0.9.json`](goldens_lpd_v0.9.json) | 0.9.0 (current) |
+| [`goldens_lpd_v0.8.json`](goldens_lpd_v0.8.json) | 0.8.0 |
 | [`goldens_lpd_v0.7.json`](goldens_lpd_v0.7.json) | 0.7.0 |
 | [`goldens_lpd_v0.6.json`](goldens_lpd_v0.6.json) | 0.6.0 |
 | [`goldens_lpd_v0.5.json`](goldens_lpd_v0.5.json) | 0.5.0 |

@@ -6,30 +6,7 @@ import (
 	"strings"
 )
 
-// BoardPDF builds a multi-page PDF: cover + LPD table + chart pages.
-// Embeds JPEG charts (stdlib). Full Tide/River site PDF parity still → 1.0.
-func BoardPDF(board LPD, maxSeries int) ([]byte, error) {
-	if maxSeries <= 0 {
-		maxSeries = 8
-	}
-	pages := []pdfPage{coverPage(board), tablePage(board)}
-	pack := BuildBoardCharts(board, maxSeries)
-	barH := 40 + minInt(maxSeries+4, maxInt(1, len(board.Top)))*28
-	if barH < 120 {
-		barH = 120
-	}
-	for _, p := range []pdfPage{
-		{title: "Consciousness radar", jpg: pack.ConsciousnessJPG, w: 960, h: 480},
-		{title: "Memory density radar", jpg: pack.DensityJPG, w: 960, h: 480},
-		{title: "Q% vs RAM", jpg: pack.ScatterJPG, w: 960, h: 440},
-		{title: "Top LPD", jpg: pack.BarsJPG, w: 960, h: barH},
-	} {
-		if len(p.jpg) > 0 {
-			pages = append(pages, p)
-		}
-	}
-	return writePDF(pages, Version)
-}
+// PDF helpers (pages + writePDF). BoardPDF / SitePDF live in site_pdf.go.
 
 func coverPage(board LPD) pdfPage {
 	lines := []string{
