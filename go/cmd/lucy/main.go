@@ -5,10 +5,10 @@
 package main
 
 import (
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io"
+	"net/http"
 	"os"
 
 	"github.com/openfluke/lucy/lucy"
@@ -23,7 +23,8 @@ func main() {
 	case "version", "-version", "--version":
 		fmt.Println(lucy.Version)
 	case "chart-radar", "chart-scatter", "chart-bars",
-		"chart-radar-png", "chart-scatter-png", "chart-bars-png", "chart-pack":
+		"chart-radar-png", "chart-scatter-png", "chart-bars-png",
+		"chart-radar-jpg", "chart-scatter-jpg", "chart-bars-jpg", "chart-pack":
 		raw, err := io.ReadAll(os.Stdin)
 		if err != nil {
 			fail(err)
@@ -57,21 +58,54 @@ func main() {
 				fail(err)
 			}
 			os.Stdout.Write(b)
+		case "chart-radar-jpg":
+			b, err := lucy.RadarJPG("Consciousness radar", lucy.ConsciousnessSeries(resp.Board, 8), 85)
+			if err != nil {
+				fail(err)
+			}
+			os.Stdout.Write(b)
+		case "chart-scatter-jpg":
+			b, err := lucy.ScatterJPG("Q% vs RAM", "RAM KiB", "Q %", lucy.LPDScatterPoints(resp.Board), 85)
+			if err != nil {
+				fail(err)
+			}
+			os.Stdout.Write(b)
+		case "chart-bars-jpg":
+			b, err := lucy.BarsJPG("Top LPD", resp.Board, 12, 85)
+			if err != nil {
+				fail(err)
+			}
+			os.Stdout.Write(b)
 		case "chart-pack":
 			pack := lucy.BuildBoardCharts(resp.Board, 8)
 			enc := json.NewEncoder(os.Stdout)
 			enc.SetIndent("", "  ")
-			_ = enc.Encode(map[string]any{
-				"version":            lucy.Version,
-				"consciousness_svg":  pack.ConsciousnessSVG,
-				"density_svg":        pack.DensitySVG,
-				"scatter_svg":        pack.ScatterSVG,
-				"bars_svg":           pack.BarsSVG,
-				"consciousness_png_b64": encodeB64(pack.ConsciousnessPNG),
-				"density_png_b64":       encodeB64(pack.DensityPNG),
-				"scatter_png_b64":       encodeB64(pack.ScatterPNG),
-				"bars_png_b64":          encodeB64(pack.BarsPNG),
-			})
+			_ = enc.Encode(lucy.ChartPackJSON(pack))
+		}
+	case "report":
+		if len(os.Args) < 3 {
+			fail(fmt.Errorf("usage: lucy report <outdir> < request.json"))
+		}
+		raw, err := io.ReadAll(os.Stdin)
+		if err != nil {
+			fail(err)
+		}
+		resp, err := lucy.BuildFromJSON(raw)
+		if err != nil {
+			fail(err)
+		}
+		if err := lucy.WriteReportDir(os.Args[2], resp.Board, 8); err != nil {
+			fail(err)
+		}
+		fmt.Println(os.Args[2])
+	case "serve":
+		addr := ":7474"
+		if len(os.Args) >= 3 {
+			addr = os.Args[2]
+		}
+		fmt.Fprintf(os.Stderr, "lucy serve %s on %s\n", lucy.Version, addr)
+		if err := http.ListenAndServe(addr, lucy.Handler()); err != nil {
+			fail(err)
 		}
 	case "build-lpd", "lpd":
 		raw, err := io.ReadAll(os.Stdin)
@@ -101,13 +135,15 @@ func usage() {
 
 Usage:
   lucy version
-  lucy build-lpd < request.json   # stdin BuildRequest → stdout BuildResponse
-  lucy chart-radar|chart-scatter|chart-bars < request.json       # SVG
-  lucy chart-radar-png|chart-scatter-png|chart-bars-png < req.json # PNG
-  lucy chart-pack < request.json  # JSON with svg + png_b64 fields
+  lucy build-lpd < request.json
+  lucy chart-radar|chart-scatter|chart-bars < request.json
+  lucy chart-*-png|chart-*-jpg < request.json
+  lucy chart-pack < request.json
+  lucy report <outdir> < request.json
+  lucy serve [addr]                 # default :7474
 
 BuildRequest:
-  {"samples":[{"id":"...","acc":90,"thru":200,"avail":40,"score":100,"ram_kib":1000}],
+  {"samples":[{"id":"...","avg_accuracy":90,"throughput":200,"availability":40,"score":100,"ram_kib":1000}],
    "options":{"keep_floor":0.7}}
 `, lucy.Version)
 }
@@ -117,9 +153,3 @@ func fail(err error) {
 	os.Exit(1)
 }
 
-func encodeB64(b []byte) string {
-	if len(b) == 0 {
-		return ""
-	}
-	return base64.StdEncoding.EncodeToString(b)
-}

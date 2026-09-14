@@ -1,11 +1,11 @@
 # charts/
 
-**0.4.0:** SVG + PNG from Go; JS canvas + native PNG; Python wrappers.
+**0.5.0:** SVG + PNG + JPG + HTML report packs.
 
 ```bash
-lucy chart-radar < req.json > radar.svg
-lucy chart-radar-png < req.json > radar.png
-lucy chart-pack < req.json          # svg + png_b64 JSON pack (PDF-ready)
+lucy chart-radar-jpg < req.json > radar.jpg
+lucy report ./out < req.json    # index.html + assets
+lucy chart-pack < req.json      # svg + png/jpg b64
 ```
 
-True **JPG** encode and full Tide/River PDF chart parity → **1.0**.
+Full Tide/River **PDF** chart parity → **1.0**.

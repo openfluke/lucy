@@ -20,18 +20,18 @@ the Go core version they claim.
 
 | Package | Channel | Version | Status | Notes |
 |---------|---------|---------|--------|-------|
-| **lucy** (monorepo) | git tag / [`VERSION`](VERSION) | `v0.4.0` | PNG packs + CI | SVG+PNG chart pack; `scripts/check-goldens.sh` |
-| **Go core** `github.com/openfluke/lucy` | Go module | `v0.4.0` | usable | + `RadarPNG` / `BuildBoardCharts` + `lucy chart-*-png` / `chart-pack` |
-| **`@openfluke/lucy`** | npm | `0.4.0` | ready (unpublished) | + `chartPNGNative` / `chartPackNative` + `<lucy-lpd-table>` |
-| **`openfluke-lucy`** | PyPI | `0.4.0` | ready (unpublished) | + `chart_png` / `chart_pack` |
-| **testdata goldens** | in-repo | `0.4.0` | locked | [`testdata/goldens_lpd_v0.4.json`](testdata/goldens_lpd_v0.4.json) |
-| **charts** | in-repo | `0.4.0` | SVG + PNG | JPG optional later; PDF-ready pack via `chart-pack` |
+| **lucy** (monorepo) | git tag / [`VERSION`](VERSION) | `v0.5.0` | serve + reports | JPG + HTML report dirs + `lucy serve` HTTP API |
+| **Go core** `github.com/openfluke/lucy` | Go module | `v0.5.0` | usable | + JPG · `WriteReportDir` · `Handler()` / `lucy serve` |
+| **`@openfluke/lucy`** | npm | `0.5.0` | ready (unpublished) | + `createLucyClient` · `chartJPGNative` · `writeReportNative` |
+| **`openfluke-lucy`** | PyPI | `0.5.0` | ready (unpublished) | + `chart_jpg` · `write_report` · `LucyClient` |
+| **testdata goldens** | in-repo | `0.5.0` | locked | [`testdata/goldens_lpd_v0.5.json`](testdata/goldens_lpd_v0.5.json) |
+| **charts** | in-repo | `0.5.0` | SVG + PNG + JPG | static `lucy report` HTML pack; full Tide PDF → 1.0 |
 
 **Scoreboard rules**
 
 1. Bump **monorepo** when the ruler or public board API changes.
 2. Bump **Go** first; npm / PyPI follow the same formulas (no silent drift).
-3. `0.0.x` = scaffold / unstable. `0.1.0` = first usable `BuildLPD` + goldens. `0.4.0` = PNG chart-pack + golden CI. `1.0.0` = portable claim + JPG/PDF parity.
+3. `0.0.x` = scaffold / unstable. `0.1.0` = first usable `BuildLPD` + goldens. `0.4.0` = PNG chart-pack + golden CI. `0.5.0` = JPG + report + serve. `1.0.0` = portable claim + Tide PDF parity.
 4. Keep this table honest when you cut a release (edit [`VERSION`](VERSION) + this table + `js/package.json` + `python/pyproject.toml` + Go tag).
 
 ### Deliverable map
@@ -58,7 +58,8 @@ Milestone meaning (all channels share the story; patch bumps `0.x.y` do not add 
 | **0.1** | Real `BuildLPD` + locked goldens; Go importable |
 | **0.2** | Host-facing boards API + npm/PyPI consuming Go artifacts |
 | **0.3** | Tide/Ocean/River-style charts usable from JS UI |
-| **0.4** | PNG export + PDF-ready chart pack + golden CI ← **current** |
+| **0.4** | PNG export + PDF-ready chart pack + golden CI |
+| **0.5** | JPG + HTML report + `lucy serve` HTTP API ← **current** |
 | **1.0** | Portable ruler: wasm + binaries documented; one real host path; formulas tunable without forks |
 
 ### Monorepo — what ships when
@@ -203,16 +204,16 @@ lucy/
 
 ## Relationship to Welvet / Tide
 
-**v0.4.0:** measuring + Tide-style boards + **PNG / chart-pack**.
+**v0.5.0:** measuring + boards + **JPG / HTML report / HTTP serve**.
 
-- Go: SVG + PNG (`RadarPNG`, …) · `BuildBoardCharts` · `lucy chart-*-png` · `lucy chart-pack`
-- npm: `chartPNGNative` / `chartPackNative` · `<lucy-board>` + `<lucy-lpd-table>`
-- Python: `chart_svg` / `chart_png` / `chart_pack`
+- Go: SVG/PNG/JPG · `WriteReportDir` · `Handler()` · `lucy report` · `lucy serve [:7474]`
+- npm: `createLucyClient` · `chartJPGNative` · `writeReportNative`
+- Python: `chart_jpg` · `write_report` · `LucyClient`
 - CI: [`scripts/check-goldens.sh`](scripts/check-goldens.sh)
 
 Host guide: [`HOST.md`](HOST.md). Rebuild: `./go/scripts/build-artifacts.sh`
 
-Goldens: [`testdata/goldens_lpd_v0.4.json`](testdata/goldens_lpd_v0.4.json).
+Goldens: [`testdata/goldens_lpd_v0.5.json`](testdata/goldens_lpd_v0.5.json).
 
 ---
 

@@ -1,10 +1,12 @@
 # go/ — Lucy measuring core
 
-**Version:** `0.4.0`
+**Version:** `0.5.0`
 
 ```go
 pack := lucy.BuildBoardCharts(board, 8)
-_ = pack.ConsciousnessPNG // []byte PNG
+_ = pack.ConsciousnessJPG
+_ = lucy.WriteReportDir("out", board, 8)
+http.ListenAndServe(":7474", lucy.Handler())
 ```
 
-CLI: `build-lpd` · `chart-radar[-png]` · `chart-scatter[-png]` · `chart-bars[-png]` · `chart-pack`
+CLI: `build-lpd` · `chart-*[-png|-jpg]` · `chart-pack` · `report` · `serve`

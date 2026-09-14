@@ -15,7 +15,7 @@ var (
 	pngFg     = color.RGBA{0xc5, 0xd0, 0xd8, 0xff}
 )
 
-// BoardCharts is a PDF-friendly pack of board visuals (SVG + PNG).
+// BoardCharts is a PDF-friendly pack of board visuals (SVG + PNG + JPG).
 type BoardCharts struct {
 	ConsciousnessSVG string `json:"consciousness_svg"`
 	DensitySVG       string `json:"density_svg"`
@@ -25,6 +25,10 @@ type BoardCharts struct {
 	DensityPNG       []byte `json:"-"`
 	ScatterPNG       []byte `json:"-"`
 	BarsPNG          []byte `json:"-"`
+	ConsciousnessJPG []byte `json:"-"`
+	DensityJPG       []byte `json:"-"`
+	ScatterJPG       []byte `json:"-"`
+	BarsJPG          []byte `json:"-"`
 }
 
 // BuildBoardCharts renders Tide-style chart set for a board (max series rows).
@@ -44,7 +48,18 @@ func BuildBoardCharts(board LPD, max int) BoardCharts {
 		DensityPNG:       mustPNG(RadarPNG("Memory density radar", dens)),
 		ScatterPNG:       mustPNG(ScatterPNG("Q% vs RAM", "RAM KiB", "Q %", pts)),
 		BarsPNG:          mustPNG(BarsPNG("Top LPD", board, max+4)),
+		ConsciousnessJPG: mustJPG(RadarJPG("Consciousness radar", live, 85)),
+		DensityJPG:       mustJPG(RadarJPG("Memory density radar", dens, 85)),
+		ScatterJPG:       mustJPG(ScatterJPG("Q% vs RAM", "RAM KiB", "Q %", pts, 85)),
+		BarsJPG:          mustJPG(BarsJPG("Top LPD", board, max+4, 85)),
 	}
+}
+
+func mustJPG(b []byte, err error) []byte {
+	if err != nil {
+		return nil
+	}
+	return b
 }
 
 func mustPNG(b []byte, err error) []byte {

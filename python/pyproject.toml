@@ -1,6 +1,6 @@
 [project]
 name = "openfluke-lucy"
-version = "0.4.0"
+version = "0.5.0"
 description = "Lucy live-fit measuring (wraps Go binaries) — Score, Q, LPD, boards"
 readme = "README.md"
 requires-python = ">=3.10"

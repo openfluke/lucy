@@ -1,6 +1,6 @@
 # python/ — `openfluke-lucy`
 
-**Version:** `0.4.0`
+**Version:** `0.5.0`
 
 ```python
 from lucy import build_lpd, chart_svg, chart_png, chart_pack

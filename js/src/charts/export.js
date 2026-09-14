@@ -70,3 +70,51 @@ export async function chartPackNative(samples, options) {
   });
   return JSON.parse(out);
 }
+
+export async function chartJPGNative(samples, kind = "radar", options) {
+  const { spawn } = await import("node:child_process");
+  const { resolveLucyBinary } = await import("../native.js");
+  const bin = await resolveLucyBinary();
+  const cmd =
+    kind === "scatter"
+      ? "chart-scatter-jpg"
+      : kind === "bars"
+        ? "chart-bars-jpg"
+        : "chart-radar-jpg";
+  const req = JSON.stringify({ samples, options });
+  return new Promise((resolve, reject) => {
+    const child = spawn(bin, [cmd], { stdio: ["pipe", "pipe", "pipe"] });
+    const chunks = [];
+    let stderr = "";
+    child.stdout.on("data", (d) => chunks.push(d));
+    child.stderr.on("data", (d) => (stderr += d));
+    child.on("error", reject);
+    child.on("close", (code) => {
+      if (code !== 0) reject(new Error(stderr || `lucy exited ${code}`));
+      else resolve(Buffer.concat(chunks));
+    });
+    child.stdin.write(req);
+    child.stdin.end();
+  });
+}
+
+export async function writeReportNative(samples, outdir, options) {
+  const { spawn } = await import("node:child_process");
+  const { resolveLucyBinary } = await import("../native.js");
+  const bin = await resolveLucyBinary();
+  const req = JSON.stringify({ samples, options });
+  return new Promise((resolve, reject) => {
+    const child = spawn(bin, ["report", outdir], { stdio: ["pipe", "pipe", "pipe"] });
+    let stdout = "";
+    let stderr = "";
+    child.stdout.on("data", (d) => (stdout += d));
+    child.stderr.on("data", (d) => (stderr += d));
+    child.on("error", reject);
+    child.on("close", (code) => {
+      if (code !== 0) reject(new Error(stderr || `lucy exited ${code}`));
+      else resolve(stdout.trim());
+    });
+    child.stdin.write(req);
+    child.stdin.end();
+  });
+}

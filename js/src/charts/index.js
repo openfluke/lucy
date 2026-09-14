@@ -6,4 +6,6 @@ export {
   canvasToPNGBlob,
   chartPNGNative,
   chartPackNative,
+  chartJPGNative,
+  writeReportNative,
 } from "./export.js";

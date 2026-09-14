@@ -1,4 +1,4 @@
-"""Chart helpers — Go CLI for SVG/PNG (and PDF-ready packs)."""
+"""Chart helpers — Go CLI for SVG/PNG/JPG + report packs."""
 
 from __future__ import annotations
 
@@ -10,12 +10,12 @@ from typing import Any, Mapping, Optional, Sequence, Union
 from ._bin import default_binary
 
 
-def _run(bin_path: Path, cmd: str, samples: Sequence[Mapping[str, Any]], options: Optional[Mapping[str, float]]) -> bytes:
+def _run(bin_path: Path, args: list[str], samples: Sequence[Mapping[str, Any]], options: Optional[Mapping[str, float]]) -> bytes:
     req: dict[str, Any] = {"samples": list(samples)}
     if options:
         req["options"] = dict(options)
     proc = subprocess.run(
-        [str(bin_path), cmd],
+        [str(bin_path), *args],
         input=json.dumps(req).encode(),
         capture_output=True,
         check=False,
@@ -25,38 +25,26 @@ def _run(bin_path: Path, cmd: str, samples: Sequence[Mapping[str, Any]], options
     return proc.stdout
 
 
-def chart_svg(
-    samples: Sequence[Mapping[str, Any]],
-    kind: str = "radar",
-    options: Optional[Mapping[str, float]] = None,
-    *,
-    binary: Optional[Union[str, Path]] = None,
-) -> str:
+def chart_svg(samples, kind="radar", options=None, *, binary=None) -> str:
     cmd = {"radar": "chart-radar", "scatter": "chart-scatter", "bars": "chart-bars"}.get(kind, kind)
-    return _run(Path(binary) if binary else default_binary(), cmd, samples, options).decode()
+    return _run(Path(binary) if binary else default_binary(), [cmd], samples, options).decode()
 
 
-def chart_png(
-    samples: Sequence[Mapping[str, Any]],
-    kind: str = "radar",
-    options: Optional[Mapping[str, float]] = None,
-    *,
-    binary: Optional[Union[str, Path]] = None,
-) -> bytes:
-    cmd = {
-        "radar": "chart-radar-png",
-        "scatter": "chart-scatter-png",
-        "bars": "chart-bars-png",
-    }.get(kind, kind)
-    return _run(Path(binary) if binary else default_binary(), cmd, samples, options)
+def chart_png(samples, kind="radar", options=None, *, binary=None) -> bytes:
+    cmd = {"radar": "chart-radar-png", "scatter": "chart-scatter-png", "bars": "chart-bars-png"}.get(kind, kind)
+    return _run(Path(binary) if binary else default_binary(), [cmd], samples, options)
 
 
-def chart_pack(
-    samples: Sequence[Mapping[str, Any]],
-    options: Optional[Mapping[str, float]] = None,
-    *,
-    binary: Optional[Union[str, Path]] = None,
-) -> dict[str, Any]:
-    """PDF-friendly pack: SVG strings + PNG base64 fields."""
-    raw = _run(Path(binary) if binary else default_binary(), "chart-pack", samples, options)
+def chart_jpg(samples, kind="radar", options=None, *, binary=None) -> bytes:
+    cmd = {"radar": "chart-radar-jpg", "scatter": "chart-scatter-jpg", "bars": "chart-bars-jpg"}.get(kind, kind)
+    return _run(Path(binary) if binary else default_binary(), [cmd], samples, options)
+
+
+def chart_pack(samples, options=None, *, binary=None) -> dict[str, Any]:
+    raw = _run(Path(binary) if binary else default_binary(), ["chart-pack"], samples, options)
     return json.loads(raw.decode())
+
+
+def write_report(samples, outdir: Union[str, Path], options=None, *, binary=None) -> str:
+    out = _run(Path(binary) if binary else default_binary(), ["report", str(outdir)], samples, options)
+    return out.decode().strip() or str(outdir)
