@@ -1,0 +1,55 @@
+{
+  "samples": [
+    {
+      "id": "f32",
+      "mode": "sgd",
+      "dtype": "float32",
+      "arch": "single",
+      "avg_accuracy": 90,
+      "throughput": 200,
+      "availability": 40,
+      "score": 100,
+      "soft_acc": 80,
+      "ram_kib": 1000
+    },
+    {
+      "id": "int8",
+      "mode": "sgd",
+      "dtype": "int8",
+      "arch": "single",
+      "avg_accuracy": 82,
+      "throughput": 180,
+      "availability": 38,
+      "score": 85,
+      "soft_acc": 72,
+      "ram_kib": 180
+    },
+    {
+      "id": "bin",
+      "mode": "sgd",
+      "dtype": "binary",
+      "arch": "single",
+      "avg_accuracy": 12,
+      "throughput": 400,
+      "availability": 50,
+      "score": 40,
+      "soft_acc": 20,
+      "ram_kib": 40
+    },
+    {
+      "id": "fat",
+      "mode": "tween",
+      "dtype": "float32",
+      "arch": "tricameral",
+      "avg_accuracy": 88,
+      "throughput": 190,
+      "availability": 35,
+      "score": 95,
+      "soft_acc": 78,
+      "ram_kib": 3000
+    }
+  ],
+  "options": {
+    "keep_floor": 0.7
+  }
+}

@@ -31,3 +31,4 @@ python/build/
 .env
 .env.*
 !.env.example
+examples/out/

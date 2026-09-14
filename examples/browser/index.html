@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Lucy board — browser example</title>
+  <style>
+    :root { --lucy-bg: #0d1216; --lucy-fg: #c5d0d8; --lucy-muted: #8aa0ad; --lucy-gap: 1rem; }
+    body { font-family: system-ui, sans-serif; background: var(--lucy-bg); color: var(--lucy-fg); margin: 1.5rem; }
+    h1 { font-weight: 600; } code { color: #3dd6c6; }
+    #status { color: var(--lucy-muted); margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+  <h1>Lucy &lt;lucy-board&gt;</h1>
+  <p id="status">Loading wasm + samples…</p>
+  <lucy-board id="board"></lucy-board>
+  <script type="module">
+    import { buildLPD, registerLucyElements, VERSION } from "../../js/src/index.js";
+    registerLucyElements();
+    const req = await fetch("../shared/samples.json").then((r) => r.json());
+    const { board } = await buildLPD(req.samples, req.options);
+    document.getElementById("status").textContent =
+      `lucy ${VERSION} · top ${board.top[0].id} LPD=${board.top[0].lpd.toFixed(3)}`;
+    document.getElementById("board").board = board;
+  </script>
+</body>
+</html>

@@ -254,6 +254,18 @@ echo '{"samples":[...]}' | lucy build-lpd
 
 ---
 
+
+---
+
+## Tutorials & examples
+
+| Start here | |
+|------------|---|
+| [Why Lucy?](docs/tutorials/00-why-lucy.md) | portable ruler story |
+| [Quickstart](docs/tutorials/01-quickstart.md) | CLI · Go · npm · Python · Jupyter |
+| [Examples hub](examples/README.md) | runnable matrix + `./scripts/run-examples.sh` |
+| [Docs index](docs/README.md) | tutorials + HOST / PORTABLE / PUBLISH |
+
 ## License
 
 [Apache License 2.0](LICENSE)
